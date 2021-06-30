@@ -31,6 +31,10 @@ export class AppComponent {
         link: '/settings'
     }];
 
+    get isMobile(): boolean {
+        return this._global.isMobile();
+    }
+
     constructor(
         private _router: Router,
         public dialog: MatDialog,

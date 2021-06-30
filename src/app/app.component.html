@@ -13,7 +13,7 @@
         </span>
     </button>
 </mat-toolbar>
-<mat-drawer-container class="sidenavContainer" [hasBackdrop]="true">
+<mat-drawer-container [ngClass]="{'sidenavContainer': isMobile, 'sidenavContainerPC': !isMobile}" [hasBackdrop]="true">
     <mat-drawer #drawer mode="push" class="drawer">
         <mat-selection-list #shoes [multiple]="false" (selectionChange)="this.routerChange($event)">
             <mat-list-option *ngFor="let link of linkList" [value]="link.link" [selected]="isCurrentLink(link.link)">
