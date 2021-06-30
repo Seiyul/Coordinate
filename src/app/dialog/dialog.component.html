@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content class="content">
+    <p>{{ content }}</p>
+</div>
+<div mat-dialog-actions class="actions">
+    <!-- Botón que cierra el diálogo, no realiza acciones -->
+    <button mat-raised-button mat-dialog-close>
+        <mat-icon>
+            {{ secondIcon }}
+        </mat-icon>
+        <span>
+            {{ secondButton }}
+        </span>
+    </button>
+    <!-- Botón que cierra el diálogo, realiza la acción dada -->
+    <button mat-raised-button color="warn" (click)="close()">
+        <mat-icon>
+            {{ warnIcon }}
+        </mat-icon>
+        <span>
+            {{ warnButton }}
+        </span>
+    </button>
+</div>
