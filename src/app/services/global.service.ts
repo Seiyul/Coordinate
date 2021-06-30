@@ -13,15 +13,19 @@ export class GlobalService {
 
     blockBrowser(): boolean {
         if (environment.production) {
-            const isMobile = /IEMobile/i.test(navigator.userAgent) ||
-                /Android/i.test(navigator.userAgent) ||
-                /BlackBerry/i.test(navigator.userAgent) ||
-                /iPhone|iPad|iPod/i.test(navigator.userAgent);
-            return !isMobile;
+            return !this.isMobile();
         }
         else {
             return false;
         }
+    }
+
+    isMobile(): boolean {
+        const isMobile = /IEMobile/i.test(navigator.userAgent) ||
+            /Android/i.test(navigator.userAgent) ||
+            /BlackBerry/i.test(navigator.userAgent) ||
+            /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        return isMobile;
     }
 
     goTo(route: string): void {
