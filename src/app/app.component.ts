@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { DialogComponent } from './dialog/dialog.component';
 import { GlobalService } from './services/global.service';
 
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
