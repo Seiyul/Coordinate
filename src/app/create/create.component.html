@@ -1,1 +1,129 @@
-<p>create works!</p>
+<div class="parent">
+    <h1 class="formElement">Crear partida</h1>
+    <form [formGroup]="form" *ngIf="!receivedSession">
+        <div formArrayName="coordinates">
+            <div *ngFor="let place of coordinates.controls; let i = index;" class="formElement">
+                <div [formGroupName]="i">
+                    <div>
+                        <span class="ubicacionText">Ubicación {{i + 1}}</span>
+                        <button mat-mini-fab color="warn" class="deleteButton" (click)="removePlace(i)" *ngIf="i !== 0">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+
+                    <div class="formElement">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Latitud</mat-label>
+                            <input matInput placeholder="Latitud" formControlName="latitude">
+                            <mat-icon matSuffix>explore</mat-icon>
+                            <mat-hint>El rango debe estar entre -90 y +90. Mínimo tiene que tener 4 decimales
+                            </mat-hint>
+                        </mat-form-field>
+                    </div>
+                    <div class="formElement">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Longitud</mat-label>
+                            <input matInput placeholder="Longitud" formControlName="longitude">
+                            <mat-icon matSuffix>explore</mat-icon>
+                            <mat-hint>El rango debe estar entre -180 y +180. Mínimo tiene que tener 4 decimales
+                            </mat-hint>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="formElement">
+            <button mat-mini-fab color="accent" (click)="addPlace()">
+                <mat-icon>
+                    add_circle_outline
+                </mat-icon>
+            </button>
+        </div>
+
+        <div class="formElement">
+            <mat-checkbox formControlName="partialTimerCheck" (onchange)="partialCleaning()">Temporizador parcial
+            </mat-checkbox>
+        </div>
+
+        <div class="formElement" *ngIf="!!form.getRawValue().partialTimerCheck">
+            <mat-form-field appearance="outline">
+                <mat-label>Temporizador parcial</mat-label>
+                <input matInput placeholder="Parcial" formControlName="partialTimer">
+                <mat-icon matSuffix>timer</mat-icon>
+                <mat-hint>Tiempo que hay entre dos distancias (en minutos).</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="formElement">
+            <mat-checkbox formControlName="fullTimerCheck" (onchange)="totalCleaning()">Temporizador total
+            </mat-checkbox>
+        </div>
+
+        <div class="formElement" *ngIf="!!form.getRawValue().fullTimerCheck">
+            <mat-form-field appearance="outline">
+                <mat-label>Temporizador total</mat-label>
+                <input matInput placeholder="Latitud" formControlName="fullTimer">
+                <mat-icon matSuffix>timer</mat-icon>
+                <mat-hint>
+                    <div>
+                        Tiempo máximo de la partida (en minutos).
+                    </div>
+                    <div *ngIf="!!form.getRawValue().partialTimer">
+                        Debe ser, como mínimo, {{coordinates.controls.length * form.getRawValue().partialTimer}}
+                        minutos.
+                    </div>
+                </mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="formElement">
+            <mat-checkbox formControlName="initialDateCheck">Fecha de inicio
+            </mat-checkbox>
+        </div>
+
+        <div class="formElement" *ngIf="!!form.getRawValue().initialDateCheck">
+            <mat-form-field appearance="outline">
+                <mat-label>Fecha de inicio</mat-label>
+                <input matInput placeholder="dd/mm/yyyy HH:MM" formControlName="initialDate">
+                <mat-icon matSuffix>lock_clock</mat-icon>
+                <mat-hint>
+                    <div>
+                        Hora de inicio para que se inicie de manera sincronizada.
+                        <div class="helpText">Formato: dd/mm/yyyy HH:MM</div>
+                    </div>
+                </mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="saveButton">
+            <button mat-raised-button color="primary" (click)="print()">Guardar</button>
+        </div>
+
+        <div class="saveButton">
+            <button mat-raised-button color="accent" (click)="generateImage()">Generar QR</button>
+        </div>
+
+    </form>
+
+    <!-- Versión provisional, no se quedará en el resultado final -->
+    <ng-container>
+
+        <div class="formElement" *ngIf="receivedSession">
+            <h2>Sesión recibida</h2>
+            <pre>{{ receivedSession | json }}</pre>
+        </div>
+
+        <div class="formElement" *ngIf="receivedSession">
+            <div class="saveButton">
+                <button mat-raised-button color="accent" (click)="clearQueryParam()">Volver</button>
+            </div>
+        </div>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="imageSource">
+        <img [src]="imageSource" width="100%" />
+    </ng-container>
+</div>
