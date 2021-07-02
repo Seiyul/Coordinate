@@ -14,11 +14,17 @@
                     <div class="formElement">
                         <mat-form-field appearance="outline">
                             <mat-label>Latitud</mat-label>
-                            <input matInput placeholder="Latitud" formControlName="latitude">
+                            <input matInput placeholder="Latitud" formControlName="latitude"
+                                (input)="masks.checkLatitude(coordinates.at(i).get('latitude'))">
                             <mat-icon matSuffix>explore</mat-icon>
                             <mat-hint>El rango debe estar entre -90 y +90. Mínimo tiene que tener 4 decimales
                             </mat-hint>
                         </mat-form-field>
+                        <button mat-icon-button (click)="helpButton()">
+                            <mat-icon class="helpIcon">
+                                help
+                            </mat-icon>
+                        </button>
                     </div>
                     <div class="formElement">
                         <mat-form-field appearance="outline">
@@ -28,6 +34,11 @@
                             <mat-hint>El rango debe estar entre -180 y +180. Mínimo tiene que tener 4 decimales
                             </mat-hint>
                         </mat-form-field>
+                        <button mat-icon-button (click)="helpButton()">
+                            <mat-icon class="helpIcon">
+                                help
+                            </mat-icon>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -42,7 +53,8 @@
         </div>
 
         <div class="formElement">
-            <mat-checkbox formControlName="partialTimerCheck" (onchange)="partialCleaning()">Temporizador parcial
+            <mat-checkbox formControlName="partialTimerCheck" (change)="partialTimerCheckClicked()">
+                Temporizador parcial
             </mat-checkbox>
         </div>
 
@@ -53,10 +65,16 @@
                 <mat-icon matSuffix>timer</mat-icon>
                 <mat-hint>Tiempo que hay entre dos distancias (en minutos).</mat-hint>
             </mat-form-field>
+            <button mat-icon-button (click)="helpButton()">
+                <mat-icon class="helpIcon">
+                    help
+                </mat-icon>
+            </button>
         </div>
 
         <div class="formElement">
-            <mat-checkbox formControlName="fullTimerCheck" (onchange)="totalCleaning()">Temporizador total
+            <mat-checkbox formControlName="fullTimerCheck" (change)="fullTimerCheckClicked()">
+                Temporizador total
             </mat-checkbox>
         </div>
 
@@ -75,18 +93,23 @@
                     </div>
                 </mat-hint>
             </mat-form-field>
+            <button mat-icon-button (click)="helpButton()">
+                <mat-icon class="helpIcon">
+                    help
+                </mat-icon>
+            </button>
         </div>
 
         <div class="formElement">
-            <mat-checkbox formControlName="initialDateCheck">Fecha de inicio
+            <mat-checkbox formControlName="initialDateCheck" (change)="initialDateCheckClicked()">Fecha de inicio
             </mat-checkbox>
         </div>
 
         <div class="formElement" *ngIf="!!form.getRawValue().initialDateCheck">
             <mat-form-field appearance="outline">
                 <mat-label>Fecha de inicio</mat-label>
-                <input matInput placeholder="dd/mm/yyyy HH:MM" formControlName="initialDate">
-                <mat-icon matSuffix>lock_clock</mat-icon>
+                <input matInput placeholder="dd/mm/yyyy HH:MM" formControlName="initialDate" type="datetime-local"
+                    [min]="minDate">
                 <mat-hint>
                     <div>
                         Hora de inicio para que se inicie de manera sincronizada.
@@ -94,16 +117,41 @@
                     </div>
                 </mat-hint>
             </mat-form-field>
+            <button mat-icon-button (click)="helpButton()">
+                <mat-icon class="helpIcon">
+                    help
+                </mat-icon>
+            </button>
         </div>
 
-        <div class="saveButton">
-            <button mat-raised-button color="primary" (click)="print()">Guardar</button>
+        <div class="buttons">
+            <!-- Deshabilitado hasta completar la funcionalidad -->
+            <button mat-raised-button color="primary" class="endButtons" disabled (click)="print()">
+                <mat-icon>
+                    save
+                </mat-icon>
+                <span>
+                    Disabled
+                </span>
+            </button>
+            <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
+                (click)="generateImage()">
+                <mat-icon>
+                    qr_code_2
+                </mat-icon>
+                <span>
+                    QR
+                </span>
+            </button>
+            <button mat-raised-button class="endButtons" [disabled]="form.invalid" (click)="getLink()">
+                <mat-icon>
+                    link
+                </mat-icon>
+                <span>
+                    Link
+                </span>
+            </button>
         </div>
-
-        <div class="saveButton">
-            <button mat-raised-button color="accent" (click)="generateImage()">Generar QR</button>
-        </div>
-
     </form>
 
     <!-- Versión provisional, no se quedará en el resultado final -->

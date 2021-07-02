@@ -8,6 +8,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { CreateComponent } from './create/create.component';
 import { BlockedComponent } from './blocked/blocked.component';
+import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { BlockedComponent } from './blocked/blocked.component';
         SettingsComponent,
         DialogComponent,
         CreateComponent,
-        BlockedComponent
+        BlockedComponent,
+        CustomSnackbarComponent
     ],
     imports: [
         BrowserModule,

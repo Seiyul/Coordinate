@@ -7,6 +7,11 @@ import { environment } from 'src/environments/environment';
 })
 export class GlobalService {
 
+    snackbarText: string = '';
+    // Default value 
+    snackbarTimer: number = 5000;
+    hideMatProcess = false;
+
     constructor(
         private _router: Router
     ) { }
@@ -30,5 +35,29 @@ export class GlobalService {
 
     goTo(route: string): void {
         this._router.navigate([route]);
+    }
+
+    setSnackbarTimer(value: number): void {
+        this.snackbarTimer = value;
+    }
+
+    getSnackbarTimer(): number {
+        return this.snackbarTimer;
+    }
+
+    setSnackbarText(text: string): void {
+        this.snackbarText = text;
+    }
+
+    getSnackbarText(): string {
+        return this.snackbarText;
+    }
+
+    setHiddenMatProcess(value: boolean): void {
+        this.hideMatProcess = value;
+    }
+
+    getHiddenMatProcess(): boolean {
+        return this.hideMatProcess;
     }
 }
