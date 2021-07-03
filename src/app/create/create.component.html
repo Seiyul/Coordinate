@@ -1,5 +1,12 @@
 <div class="parent">
-    <h1 class="formElement">{{ this.receivedSession ? 'Consultar partida' : 'Crear partida' }}</h1>
+    <h1 class="formElement">
+        {{ this.receivedSession ? 'Consultar partida' : 'Crear partida' }}
+        <button mat-mini-fab color="warn" class="cleanMiniFab" (click)="clearSession()" *ngIf="this.receivedSession">
+            <mat-icon>
+                delete
+            </mat-icon>
+        </button>
+    </h1>
     <form [formGroup]="form">
         <div formArrayName="coordinates">
             <div *ngFor="let place of coordinates.controls; let i = index;" class="formElement">

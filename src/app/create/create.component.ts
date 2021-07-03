@@ -109,7 +109,6 @@ export class CreateComponent implements OnInit, AfterContentInit {
         const link = this._qrcode.getUrl(this.form.value);
         this._global.copyToClipboard(link);
         this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
-
     }
 
     partialTimerCheckClicked(): void {
@@ -155,8 +154,6 @@ export class CreateComponent implements OnInit, AfterContentInit {
 
         dialogRef.componentInstance.title = 'Pegar coordenadas';
         dialogRef.componentInstance.content = 'Copia y pega las coordenadas directamente desde Google Maps.';
-        dialogRef.componentInstance.subcontent = 'Aviso: No hay validaciones aplicadas actualmente.';
-
 
         dialogRef.componentInstance.warnButton = 'Aplicar';
         dialogRef.componentInstance.warnIcon = 'save';
@@ -227,5 +224,32 @@ export class CreateComponent implements OnInit, AfterContentInit {
         else {
             this.clearQueryParam();
         }
+    }
+
+    clearSession(): void {
+        const dialogRef = this.dialog.open(DialogComponent, { disableClose: true });
+
+        dialogRef.componentInstance.pasteMode = false;
+
+        dialogRef.componentInstance.title = 'Borrar datos';
+        dialogRef.componentInstance.content = 'Se van a borrar los datos de la partida. ¿Desea continuar?';
+        dialogRef.componentInstance.subcontent = 'Puedes recuperar la partida mediante el mismo link.'
+
+        dialogRef.componentInstance.warnButton = 'Borrar';
+        dialogRef.componentInstance.warnIcon = 'delete';
+
+        dialogRef.componentInstance.secondButton = 'Cancelar';
+        dialogRef.componentInstance.secondIcon = 'close';
+
+        dialogRef.afterClosed().toPromise().then((res) => {
+            if (res) {
+                this.clearQueryParam();
+                this.form.reset();
+                while (this.coordinates.length !== 0) {
+                    this.coordinates.removeAt(0);
+                }
+                this.addPlace();
+            }
+        });
     }
 }
