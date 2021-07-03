@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { GlobalService } from './services/global.service';
 
@@ -39,7 +41,8 @@ export class AppComponent {
     constructor(
         private _router: Router,
         public dialog: MatDialog,
-        private _global: GlobalService
+        private _global: GlobalService,
+        public snackbar: MatSnackBar
     ) {
         if (this._global.blockBrowser()) {
             this.block = true;
@@ -55,16 +58,20 @@ export class AppComponent {
         return this._router.url === link;
     }
 
+
     closeModal(): void {
         const dialogRef = this.dialog.open(DialogComponent, { disableClose: true });
         dialogRef.componentInstance.title = 'Salir de la partida';
         dialogRef.componentInstance.content = '¿Deseas salir de la partida?';
         dialogRef.afterClosed().toPromise().then((res) => {
+            this._global.setSnackbarTimer(2500);
             if (res) {
-                console.log('Botón de salir');
+                this._global.setSnackbarText('Botón de salir. Funcionalidad pendiente de implantación.');
+                this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
             }
             else {
-                console.log('Botón de permanecer');
+                this._global.setSnackbarText('Botón de permanecer. No hace nada.');
+                this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
             }
         });
     }

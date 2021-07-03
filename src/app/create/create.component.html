@@ -6,13 +6,21 @@
                 <div [formGroupName]="i">
                     <div>
                         <span class="ubicacionText">Ubicación {{i + 1}}</span>
+                        <button mat-raised-button color="primary" class="pasteButton" (click)="pasteCoordinates(i)">
+                            <span>
+                                Pegar desde
+                            </span>
+                            <mat-icon>
+                                map
+                            </mat-icon>
+                        </button>
                         <button mat-mini-fab color="warn" class="deleteButton" (click)="removePlace(i)" *ngIf="i !== 0">
                             <mat-icon>close</mat-icon>
                         </button>
                     </div>
 
-                    <div class="formElement">
-                        <mat-form-field appearance="outline">
+                    <div>
+                        <mat-form-field appearance="outline" class="formElement">
                             <mat-label>Latitud</mat-label>
                             <input matInput placeholder="Latitud" formControlName="latitude"
                                 (input)="masks.checkLatitude(coordinates.at(i).get('latitude'))">
@@ -26,10 +34,11 @@
                             </mat-icon>
                         </button>
                     </div>
-                    <div class="formElement">
-                        <mat-form-field appearance="outline">
+                    <div>
+                        <mat-form-field appearance="outline" class="formElement">
                             <mat-label>Longitud</mat-label>
-                            <input matInput placeholder="Longitud" formControlName="longitude">
+                            <input matInput placeholder="Longitud" formControlName="longitude"
+                                (input)="masks.checkLongitude(coordinates.at(i).get('longitude'))">
                             <mat-icon matSuffix>explore</mat-icon>
                             <mat-hint>El rango debe estar entre -180 y +180. Mínimo tiene que tener 4 decimales
                             </mat-hint>
@@ -45,25 +54,37 @@
         </div>
 
         <div class="formElement">
-            <button mat-mini-fab color="accent" (click)="addPlace()">
+            <button mat-raised-button color="accent" (click)="addPlace()">
                 <mat-icon>
-                    add_circle_outline
+                    add_circle
                 </mat-icon>
+                <span>
+                    Añadir ubicación
+                </span>
             </button>
         </div>
 
         <div class="formElement">
-            <mat-checkbox formControlName="partialTimerCheck" (change)="partialTimerCheckClicked()">
+            <mat-checkbox formControlName="partialTimerCheck" (change)="partialTimerCheckClicked()"
+                [disabled]="coordinates.controls.length <= 1">
                 Temporizador parcial
             </mat-checkbox>
         </div>
 
-        <div class="formElement" *ngIf="!!form.getRawValue().partialTimerCheck">
+        <div class="partialTimer" *ngIf="!!form.getRawValue().partialTimerCheck">
             <mat-form-field appearance="outline">
                 <mat-label>Temporizador parcial</mat-label>
-                <input matInput placeholder="Parcial" formControlName="partialTimer">
+                <input matInput placeholder="Parcial" formControlName="partialTimer"
+                    (input)="updateValueValidityTimers()">
                 <mat-icon matSuffix>timer</mat-icon>
-                <mat-hint>Tiempo que hay entre dos distancias (en minutos).</mat-hint>
+                <mat-hint>
+                    <div>
+                        Tiempo que hay entre dos distancias (en minutos).
+                    </div>
+                    <div>
+                        Tiempo máximo: 60 minutos / 1 hora.
+                    </div>
+                </mat-hint>
             </mat-form-field>
             <button mat-icon-button (click)="helpButton()">
                 <mat-icon class="helpIcon">
@@ -78,18 +99,21 @@
             </mat-checkbox>
         </div>
 
-        <div class="formElement" *ngIf="!!form.getRawValue().fullTimerCheck">
+        <div class="totalTimer" *ngIf="!!form.getRawValue().fullTimerCheck">
             <mat-form-field appearance="outline">
                 <mat-label>Temporizador total</mat-label>
-                <input matInput placeholder="Latitud" formControlName="fullTimer">
+                <input matInput placeholder="Latitud" formControlName="fullTimer" (input)="updateValueValidityTimers()">
                 <mat-icon matSuffix>timer</mat-icon>
                 <mat-hint>
                     <div>
                         Tiempo máximo de la partida (en minutos).
                     </div>
                     <div *ngIf="!!form.getRawValue().partialTimer">
-                        Debe ser, como mínimo, {{coordinates.controls.length * form.getRawValue().partialTimer}}
+                        Tiempo mínimo: {{coordinates.controls.length * form.getRawValue().partialTimer}}
                         minutos.
+                    </div>
+                    <div>
+                        Tiempo máximo: 1440 minutos / 24 horas.
                     </div>
                 </mat-hint>
             </mat-form-field>

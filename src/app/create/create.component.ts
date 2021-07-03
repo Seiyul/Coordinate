@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { CustomSnackbarComponent } from '../custom-snackbar/custom-snackbar.component';
+import { DialogComponent } from '../dialog/dialog.component';
 import { GlobalService } from '../services/global.service';
 import { MasksService } from '../services/masks.service';
 import { QrcodeService } from '../services/qrcode.service';
@@ -20,7 +22,8 @@ export class CreateComponent implements OnInit {
         private _activatedRoute: ActivatedRoute,
         private _global: GlobalService,
         public snackbar: MatSnackBar,
-        public masks: MasksService
+        public masks: MasksService,
+        public dialog: MatDialog,
     ) { }
 
 
@@ -61,17 +64,22 @@ export class CreateComponent implements OnInit {
 
     newPlace(): FormGroup {
         return this._formBuilder.group({
-            latitude: new FormControl('', [Validators.min(-90), Validators.max(90), Validators.required, Validators.maxLength(12), Validators.minLength(6)]),
-            longitude: new FormControl('', [Validators.min(-180), Validators.max(180), Validators.required, Validators.maxLength(12), Validators.minLength(6)])
+            latitude: new FormControl('', [Validators.min(-90), Validators.max(90), Validators.required, Validators.maxLength(20), Validators.minLength(6)]),
+            longitude: new FormControl('', [Validators.min(-180), Validators.max(180), Validators.required, Validators.maxLength(20), Validators.minLength(6)])
         })
     }
 
     addPlace(): void {
         this.coordinates.push(this.newPlace());
+        this.updateValueValidityTimers()
     }
 
     removePlace(index: any): void {
         this.coordinates.removeAt(index);
+        if (this.coordinates.controls.length <= 1) {
+            this.form.get('partialTimerCheck')?.setValue(false);
+            this.partialTimerCheckClicked();
+        }
     }
 
     print(): void {
@@ -84,7 +92,9 @@ export class CreateComponent implements OnInit {
                 this.imageSource = value;
             })
             .catch(error => {
-                console.log('error -->', error);
+                this._global.setSnackbarTimer(5000);
+                this._global.setSnackbarText('Error: El código QR es demasiado grande para ser generado. Utiliza el botón de Link para compartir la partida.');
+                this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
             });
     }
 
@@ -95,13 +105,9 @@ export class CreateComponent implements OnInit {
 
     getLink(): void {
         const link = this._qrcode.getUrl(this.form.value);
-        const el = document.createElement('textarea');
-        el.value = link;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        this.openCustomSnackbar();
+        this._global.copyToClipboard(link);
+        this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
+
     }
 
     partialTimerCheckClicked(): void {
@@ -134,15 +140,54 @@ export class CreateComponent implements OnInit {
         }
     }
 
-    openCustomSnackbar(): void {
-        this._global.setSnackbarTimer(3500);
-        this._global.setSnackbarText('Copiado en el portapapeles');
-        this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
-    }
-
     helpButton(): void {
         this._global.setSnackbarTimer(2500);
         this._global.setSnackbarText('Pendiente de redactar 😅');
         this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
+    }
+
+    pasteCoordinates(index: number): void {
+        const dialogRef = this.dialog.open(DialogComponent, { disableClose: true });
+
+        dialogRef.componentInstance.pasteMode = true;
+
+        dialogRef.componentInstance.title = 'Pegar coordenadas';
+        dialogRef.componentInstance.content = 'Copia y pega las coordenadas directamente desde Google Maps.';
+        dialogRef.componentInstance.subcontent = 'Aviso: No hay validaciones aplicadas actualmente.';
+
+
+        dialogRef.componentInstance.warnButton = 'Aplicar';
+        dialogRef.componentInstance.warnIcon = 'save';
+
+        dialogRef.componentInstance.secondButton = 'Cancelar';
+        dialogRef.componentInstance.secondIcon = 'close';
+
+        dialogRef.componentInstance.saveAction.subscribe((res: any) => {
+            const array = this.form.get('coordinates')?.value;
+
+            const result = res.value.replaceAll(' ', '');
+
+            const latitude = result.split(',')[0];
+            const longitude = result.split(',')[1];
+
+            array.splice(index, 1, {
+                'latitude': latitude,
+                'longitude': longitude
+            });
+
+            this.form.get('coordinates')?.setValue(array);
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+            dialogRef.componentInstance.saveAction.unsubscribe();
+        });
+    }
+
+    updateValueValidityTimers(): void {
+        const minValue = this.coordinates.controls.length * this.form.getRawValue().partialTimer;
+        if (this.form.getRawValue().fullTimerCheck === true) {
+            this.form.get('fullTimer')!.setValidators([Validators.required, Validators.max(1440), Validators.min(minValue)]);
+            this.form.get('fullTimer')!.updateValueAndValidity();
+        }
     }
 }

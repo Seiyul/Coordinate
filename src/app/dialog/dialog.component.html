@@ -1,24 +1,83 @@
-<h1 mat-dialog-title>{{ title }}</h1>
-<div mat-dialog-content class="content">
-    <p>{{ content }}</p>
-</div>
-<div mat-dialog-actions class="actions">
-    <!-- Botón que cierra el diálogo, no realiza acciones -->
-    <button mat-raised-button mat-dialog-close>
-        <mat-icon>
-            {{ secondIcon }}
-        </mat-icon>
-        <span>
-            {{ secondButton }}
-        </span>
-    </button>
-    <!-- Botón que cierra el diálogo, realiza la acción dada -->
-    <button mat-raised-button color="warn" (click)="close()">
-        <mat-icon>
-            {{ warnIcon }}
-        </mat-icon>
-        <span>
-            {{ warnButton }}
-        </span>
-    </button>
-</div>
+<ng-container *ngIf="!pasteMode">
+    <h1 mat-dialog-title>{{ title }}</h1>
+    <div mat-dialog-content class="content">
+        <p>{{ content }}</p>
+    </div>
+    <div mat-dialog-actions class="actions">
+        <!-- Botón que cierra el diálogo, no realiza acciones -->
+        <button mat-raised-button mat-dialog-close>
+            <mat-icon>
+                {{ secondIcon }}
+            </mat-icon>
+            <span>
+                {{ secondButton }}
+            </span>
+        </button>
+        <!-- Botón que cierra el diálogo, realiza la acción dada -->
+        <button mat-raised-button color="warn" (click)="close()">
+            <mat-icon>
+                {{ warnIcon }}
+            </mat-icon>
+            <span>
+                {{ warnButton }}
+            </span>
+        </button>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="pasteMode">
+    <h1 mat-dialog-title>{{ title }}</h1>
+
+    <div mat-dialog-content class="content">
+        <p>{{ content }}</p>
+        <div class="subcontent">
+            <p>{{ subcontent }}</p>
+        </div>
+    </div>
+
+    <div class="formElement">
+        <button mat-raised-button (click)="getRandomCoordinates()" color="accent">
+            <mat-icon>
+                auto_fix_high
+            </mat-icon>
+            <span>
+                Copiar coords. de prueba
+            </span>
+        </button>
+    </div>
+
+    <div class="formElement">
+        <mat-form-field appearance="outline">
+            <mat-label>Coordenadas</mat-label>
+            <input matInput placeholder="" [formControl]="getCoordinatesControl">
+            <button matSuffix mat-icon-button (click)="helpButton()">
+                <mat-icon class="helpIcon">
+                    help
+                </mat-icon>
+            </button>
+            <mat-hint>Pulsa en <mat-icon>help</mat-icon> para más
+                información.
+            </mat-hint>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="actions">
+        <!-- Botón que cierra el diálogo, no realiza acciones -->
+        <button mat-raised-button mat-dialog-close color="warn">
+            <mat-icon>
+                {{ secondIcon }}
+            </mat-icon>
+            <span>
+                {{ secondButton }}
+            </span>
+        </button>
+        <!-- Botón que cierra el diálogo, realiza la acción dada -->
+        <button mat-raised-button color="primary" (click)="save()">
+            <mat-icon>
+                {{ warnIcon }}
+            </mat-icon>
+            <span>
+                {{ warnButton }}
+            </span>
+        </button>
+    </div>
+</ng-container>
