@@ -1,12 +1,13 @@
 <div class="parent">
-    <h1 class="formElement">Crear partida</h1>
-    <form [formGroup]="form" *ngIf="!receivedSession">
+    <h1 class="formElement">{{ this.receivedSession ? 'Consultar partida' : 'Crear partida' }}</h1>
+    <form [formGroup]="form">
         <div formArrayName="coordinates">
             <div *ngFor="let place of coordinates.controls; let i = index;" class="formElement">
                 <div [formGroupName]="i">
                     <div>
                         <span class="ubicacionText">Ubicación {{i + 1}}</span>
-                        <button mat-raised-button color="primary" class="pasteButton" (click)="pasteCoordinates(i)">
+                        <button mat-raised-button color="primary" class="pasteButton" (click)="pasteCoordinates(i)"
+                            [disabled]="this.receivedSession">
                             <span>
                                 Pegar desde
                             </span>
@@ -14,7 +15,8 @@
                                 map
                             </mat-icon>
                         </button>
-                        <button mat-mini-fab color="warn" class="deleteButton" (click)="removePlace(i)" *ngIf="i !== 0">
+                        <button mat-mini-fab color="warn" class="deleteButton" (click)="removePlace(i)" *ngIf="i !== 0"
+                            [disabled]="this.receivedSession">
                             <mat-icon>close</mat-icon>
                         </button>
                     </div>
@@ -24,37 +26,35 @@
                             <mat-label>Latitud</mat-label>
                             <input matInput placeholder="Latitud" formControlName="latitude"
                                 (input)="masks.checkLatitude(coordinates.at(i).get('latitude'))">
-                            <mat-icon matSuffix>explore</mat-icon>
+                            <button matSuffix mat-icon-button (click)="helpButton()">
+                                <mat-icon class="helpIcon">
+                                    help
+                                </mat-icon>
+                            </button>
                             <mat-hint>El rango debe estar entre -90 y +90. Mínimo tiene que tener 4 decimales
                             </mat-hint>
                         </mat-form-field>
-                        <button mat-icon-button (click)="helpButton()">
-                            <mat-icon class="helpIcon">
-                                help
-                            </mat-icon>
-                        </button>
                     </div>
                     <div>
                         <mat-form-field appearance="outline" class="formElement">
                             <mat-label>Longitud</mat-label>
                             <input matInput placeholder="Longitud" formControlName="longitude"
                                 (input)="masks.checkLongitude(coordinates.at(i).get('longitude'))">
-                            <mat-icon matSuffix>explore</mat-icon>
+                            <button matSuffix mat-icon-button (click)="helpButton()">
+                                <mat-icon class="helpIcon">
+                                    help
+                                </mat-icon>
+                            </button>
                             <mat-hint>El rango debe estar entre -180 y +180. Mínimo tiene que tener 4 decimales
                             </mat-hint>
                         </mat-form-field>
-                        <button mat-icon-button (click)="helpButton()">
-                            <mat-icon class="helpIcon">
-                                help
-                            </mat-icon>
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="formElement">
-            <button mat-raised-button color="accent" (click)="addPlace()">
+            <button mat-raised-button color="accent" (click)="addPlace()" [disabled]="this.receivedSession">
                 <mat-icon>
                     add_circle
                 </mat-icon>
@@ -69,6 +69,11 @@
                 [disabled]="coordinates.controls.length <= 1">
                 Temporizador parcial
             </mat-checkbox>
+            <button matSuffix mat-icon-button (click)="helpButton()" *ngIf="coordinates.controls.length <= 1">
+                <mat-icon class="helpIcon">
+                    help
+                </mat-icon>
+            </button>
         </div>
 
         <div class="partialTimer" *ngIf="!!form.getRawValue().partialTimerCheck">
@@ -76,21 +81,20 @@
                 <mat-label>Temporizador parcial</mat-label>
                 <input matInput placeholder="Parcial" formControlName="partialTimer"
                     (input)="updateValueValidityTimers()">
-                <mat-icon matSuffix>timer</mat-icon>
+                <button matSuffix mat-icon-button (click)="helpButton()">
+                    <mat-icon class="helpIcon">
+                        help
+                    </mat-icon>
+                </button>
                 <mat-hint>
                     <div>
                         Tiempo que hay entre dos distancias (en minutos).
                     </div>
                     <div>
-                        Tiempo máximo: 60 minutos / 1 hora.
+                        Tiempo máximo: {{ maxPartialTime() }} minutos.
                     </div>
                 </mat-hint>
             </mat-form-field>
-            <button mat-icon-button (click)="helpButton()">
-                <mat-icon class="helpIcon">
-                    help
-                </mat-icon>
-            </button>
         </div>
 
         <div class="formElement">
@@ -103,7 +107,11 @@
             <mat-form-field appearance="outline">
                 <mat-label>Temporizador total</mat-label>
                 <input matInput placeholder="Latitud" formControlName="fullTimer" (input)="updateValueValidityTimers()">
-                <mat-icon matSuffix>timer</mat-icon>
+                <button matSuffix mat-icon-button (click)="helpButton()">
+                    <mat-icon class="helpIcon">
+                        help
+                    </mat-icon>
+                </button>
                 <mat-hint>
                     <div>
                         Tiempo máximo de la partida (en minutos).
@@ -117,11 +125,6 @@
                     </div>
                 </mat-hint>
             </mat-form-field>
-            <button mat-icon-button (click)="helpButton()">
-                <mat-icon class="helpIcon">
-                    help
-                </mat-icon>
-            </button>
         </div>
 
         <div class="formElement">
@@ -134,18 +137,20 @@
                 <mat-label>Fecha de inicio</mat-label>
                 <input matInput placeholder="dd/mm/yyyy HH:MM" formControlName="initialDate" type="datetime-local"
                     [min]="minDate">
+                <button matSuffix mat-icon-button (click)="helpButton()">
+                    <mat-icon class="helpIcon">
+                        help
+                    </mat-icon>
+                </button>
                 <mat-hint>
                     <div>
                         Hora de inicio para que se inicie de manera sincronizada.
                         <div class="helpText">Formato: dd/mm/yyyy HH:MM</div>
+                        <!-- <span>Consejo: Deja tiempo de margen; una vez creada la partida,
+                            no se puede modificar. </span> -->
                     </div>
                 </mat-hint>
             </mat-form-field>
-            <button mat-icon-button (click)="helpButton()">
-                <mat-icon class="helpIcon">
-                    help
-                </mat-icon>
-            </button>
         </div>
 
         <div class="buttons">
@@ -179,7 +184,7 @@
     </form>
 
     <!-- Versión provisional, no se quedará en el resultado final -->
-    <ng-container>
+    <!-- <ng-container>
 
         <div class="formElement" *ngIf="receivedSession">
             <h2>Sesión recibida</h2>
@@ -192,7 +197,7 @@
             </div>
         </div>
 
-    </ng-container>
+    </ng-container> -->
 
 
     <ng-container *ngIf="imageSource">

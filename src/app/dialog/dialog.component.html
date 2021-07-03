@@ -71,7 +71,7 @@
             </span>
         </button>
         <!-- Botón que cierra el diálogo, realiza la acción dada -->
-        <button mat-raised-button color="primary" (click)="save()">
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="getCoordinatesControl.invalid">
             <mat-icon>
                 {{ warnIcon }}
             </mat-icon>

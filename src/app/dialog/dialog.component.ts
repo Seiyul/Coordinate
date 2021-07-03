@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { EventEmitter } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { GlobalService } from '../services/global.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomSnackbarComponent } from '../custom-snackbar/custom-snackbar.component';
+import { ValidatorsService } from '../services/validators.service';
 
 @Component({
     selector: 'app-dialog',
     templateUrl: './dialog.component.html',
     styleUrls: ['./dialog.component.scss']
 })
-export class DialogComponent implements OnInit {
+export class DialogComponent implements OnInit, AfterContentInit {
 
     warnButton: string = '';
     warnIcon: string = '';
@@ -41,6 +42,11 @@ export class DialogComponent implements OnInit {
         private _global: GlobalService,
         public snackbar: MatSnackBar
     ) { }
+
+
+    ngAfterContentInit(): void {
+        this.getCoordinatesControl.setValidators([Validators.required, ValidatorsService.pasteCoordinate()]);
+    }
 
 
 
