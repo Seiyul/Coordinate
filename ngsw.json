@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1625681025639,
+  "timestamp": 1625694565664,
   "index": "/Coordinate/index.html",
   "assetGroups": [
     {
@@ -12,7 +12,7 @@
       },
       "urls": [
         "/Coordinate/index.html",
-        "/Coordinate/main.5337bc4eccde0bf6cbc0.js",
+        "/Coordinate/main.e116b7bfe95883c2ed90.js",
         "/Coordinate/manifest.webmanifest",
         "/Coordinate/polyfills.00096ed7d93ed26ee6df.js",
         "/Coordinate/runtime.7b63b9fd40098a2e8207.js",
@@ -54,8 +54,8 @@
     "/Coordinate/assets/icons/icon-72x72.png": "bf315c77069aa86c48cb954a2c7ef15c746f59b9",
     "/Coordinate/assets/icons/icon-96x96.png": "65a9e7580b0da20b1570a4dac96d33a76a2ad77b",
     "/Coordinate/assets/qrcode.svg": "2f7399b757ed02bb206d3d003d17e2d29b9547b3",
-    "/Coordinate/index.html": "3a04ed9fed840f75fbaf4f9038545ce9eb728d1c",
-    "/Coordinate/main.5337bc4eccde0bf6cbc0.js": "8e31fc1adefe0e1be19d03459c6362b3f01832ae",
+    "/Coordinate/index.html": "b67e56d80a94f117daa9edc08e9979c3a821152c",
+    "/Coordinate/main.e116b7bfe95883c2ed90.js": "5110fceef1392be2b9f002e57c861a31af61aa53",
     "/Coordinate/manifest.webmanifest": "917cef198469f08d2f5667207926aae11a4d2c10",
     "/Coordinate/polyfills.00096ed7d93ed26ee6df.js": "cfe7b0b53e96bff9ba384b4d497c08475a617d62",
     "/Coordinate/runtime.7b63b9fd40098a2e8207.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
