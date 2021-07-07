@@ -9,6 +9,10 @@ import { DialogComponent } from './dialog/dialog.component';
 import { CreateComponent } from './create/create.component';
 import { BlockedComponent } from './blocked/blocked.component';
 import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { AboutComponent } from './about/about.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -19,12 +23,20 @@ import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.compo
         DialogComponent,
         CreateComponent,
         BlockedComponent,
-        CustomSnackbarComponent
+        CustomSnackbarComponent,
+        AboutComponent
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
-        MaterialModule
+        MaterialModule,
+        HttpClientModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: environment.production,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        })
     ],
     providers: [],
     bootstrap: [AppComponent]

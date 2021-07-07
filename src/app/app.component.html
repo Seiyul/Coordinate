@@ -27,6 +27,17 @@
                     </span>
                 </div>
             </mat-list-option>
+            <mat-list-option class="add-button" [ngClass]="{'disabledColor': isPwa}" *ngIf="hasServiceWorkerReady"
+                (click)="installPwa()" [value]="null" [disabled]="isPwa">
+                <div>
+                    <mat-icon>
+                        {{ isPwa ? 'check_circle' : 'offline_bolt' }}
+                    </mat-icon>
+                    <span>
+                        {{ isPwa ? 'Instalado' : 'Instalar' }}
+                    </span>
+                </div>
+            </mat-list-option>
         </mat-selection-list>
     </mat-drawer>
     <mat-drawer-content style="margin: auto; width: 100%; height: 100%;">

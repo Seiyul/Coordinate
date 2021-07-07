@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -12,6 +13,7 @@ export class GlobalService {
     // Default value 
     snackbarTimer: number = 5000;
     hideMatProcess = false;
+    version: any;
 
     constructor(
         private _router: Router,
@@ -20,7 +22,7 @@ export class GlobalService {
 
     blockBrowser(): boolean {
         if (environment.production) {
-            return !this.isMobile();
+            return !this.isMobile() && !this.isLocalhost();
         }
         else {
             return false;
@@ -33,6 +35,10 @@ export class GlobalService {
             /BlackBerry/i.test(navigator.userAgent) ||
             /iPhone|iPad|iPod/i.test(navigator.userAgent);
         return isMobile;
+    }
+
+    isLocalhost(): boolean {
+        return window.location.host.includes('localhost') || window.location.host.includes('127.0.0.1');
     }
 
     goTo(route: string): void {
@@ -86,5 +92,13 @@ export class GlobalService {
 
         const index = Math.floor(Math.random() * (coordinates.length - 1));
         this.copyToClipboard(coordinates[index]);
+    }
+
+    getLatestVersion(): any {
+        return this.version;
+    }
+
+    setLatestVersion(version: any): void {
+        this.version = version;
     }
 }

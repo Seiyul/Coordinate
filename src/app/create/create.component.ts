@@ -67,7 +67,8 @@ export class CreateComponent implements OnInit, AfterContentInit {
     newPlace(): FormGroup {
         return this._formBuilder.group({
             latitude: new FormControl('', [Validators.min(-90), Validators.max(90), Validators.required, Validators.maxLength(20), Validators.minLength(6)]),
-            longitude: new FormControl('', [Validators.min(-180), Validators.max(180), Validators.required, Validators.maxLength(20), Validators.minLength(6)])
+            longitude: new FormControl('', [Validators.min(-180), Validators.max(180), Validators.required, Validators.maxLength(20), Validators.minLength(6)]),
+            description: new FormControl('')
         })
     }
 
@@ -171,7 +172,8 @@ export class CreateComponent implements OnInit, AfterContentInit {
 
             array.splice(index, 1, {
                 'latitude': latitude,
-                'longitude': longitude
+                'longitude': longitude,
+                'description': 'Texto de ejemplo'
             });
 
             this.form.get('coordinates')?.setValue(array);

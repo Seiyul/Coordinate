@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -13,10 +14,16 @@ import { GlobalService } from './services/global.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     title = 'Coordinate';
 
     block = false;
+
+    isPwa = false;
+
+    hasServiceWorkerReady = false;
+
+    version: any;
 
     linkList = [{
         name: 'Inicio',
@@ -32,6 +39,11 @@ export class AppComponent {
         name: 'Ajustes',
         icon: 'settings',
         link: '/settings'
+    },
+    {
+        name: 'Acerca de',
+        icon: 'help',
+        link: '/about'
     }];
 
     get isMobile(): boolean {
@@ -42,7 +54,8 @@ export class AppComponent {
         private _router: Router,
         public dialog: MatDialog,
         private _global: GlobalService,
-        public snackbar: MatSnackBar
+        public snackbar: MatSnackBar,
+        private _http: HttpClient
     ) {
         if (this._global.blockBrowser()) {
             this.block = true;
@@ -50,8 +63,23 @@ export class AppComponent {
         }
     }
 
+    ngOnInit(): void {
+        this.installPwa();
+        this.checkIfComesFromPwa();
+
+        navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+            this.hasServiceWorkerReady = true;
+        }).catch(() => {
+            this.hasServiceWorkerReady = false;
+        });
+
+        this.setVersion();
+    }
+
     routerChange(event: any): void {
-        this._router.navigate([event.option.value]);
+        if (event?.option?.value) {
+            this._router.navigate([event.option.value]);
+        }
     }
 
     isCurrentLink(link: any): boolean {
@@ -74,5 +102,45 @@ export class AppComponent {
                 this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
             }
         });
+    }
+
+    installPwa(): void {
+        let deferredPrompt: any;
+        const addBtn = document.querySelector('.add-button') as HTMLElement;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            addBtn.addEventListener('click', (e) => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult: any) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        this._global.setSnackbarTimer(2500);
+                        this._global.setSnackbarText('Gracias por instalar la aplicación');
+                        this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
+    }
+
+    checkIfComesFromPwa(): void {
+        this.isPwa = ["fullscreen", "standalone", "minimal-ui"].some(
+            (displayMode) => window.matchMedia('(display-mode: ' + displayMode + ')').matches
+        );
+    }
+
+    setVersion(): void {
+        if (environment.production) {
+            const url = window.location.origin + '/Coordinate/' + 'timestamp.txt';
+            this._http.get(url).subscribe((response: any) => {
+                this._global.setLatestVersion(response);
+            });
+        }
+        else {
+            this._global.setLatestVersion('Local');
+        }
     }
 }

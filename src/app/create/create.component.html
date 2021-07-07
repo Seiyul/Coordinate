@@ -56,6 +56,20 @@
                             </mat-hint>
                         </mat-form-field>
                     </div>
+                    <div>
+                        <mat-form-field appearance="outline" class="formElement">
+                            <mat-label>Mensaje (opcional)</mat-label>
+                            <textarea matInput cdkTextareaAutosize placeholder="Mensaje" formControlName="description">
+                            </textarea>
+                            <button matSuffix mat-icon-button (click)="helpButton()">
+                                <mat-icon class="helpIcon">
+                                    help
+                                </mat-icon>
+                            </button>
+                            <mat-hint>El mensaje se mostrará cuando el usuario esté dentro del rango de la ubicación.
+                            </mat-hint>
+                        </mat-form-field>
+                    </div>
                 </div>
             </div>
         </div>
