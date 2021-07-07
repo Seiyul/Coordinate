@@ -27,12 +27,16 @@ jobs:
         run: |
           npm install
           npm run-script deploy
-          
       - name: Create 404 Page
         run: |
           cd dist
           cd Coordinate
           cp index.html 404.html
+      - name: Timestamp
+        run: |
+          cd dist
+          cd Coordinate
+          date > timestamp.txt 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
