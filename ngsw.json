@@ -1,0 +1,83 @@
+{
+  "configVersion": 1,
+  "timestamp": 1625678991079,
+  "index": "/Coordinate/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/Coordinate/index.html",
+        "/Coordinate/main.5337bc4eccde0bf6cbc0.js",
+        "/Coordinate/manifest.webmanifest",
+        "/Coordinate/polyfills.00096ed7d93ed26ee6df.js",
+        "/Coordinate/runtime.7b63b9fd40098a2e8207.js",
+        "/Coordinate/styles.35cf4cc19d69a36edcb4.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/Coordinate/assets/compass.png",
+        "/Coordinate/assets/icons/icon-128x128.png",
+        "/Coordinate/assets/icons/icon-144x144.png",
+        "/Coordinate/assets/icons/icon-152x152.png",
+        "/Coordinate/assets/icons/icon-192x192.png",
+        "/Coordinate/assets/icons/icon-384x384.png",
+        "/Coordinate/assets/icons/icon-512x512.png",
+        "/Coordinate/assets/icons/icon-72x72.png",
+        "/Coordinate/assets/icons/icon-96x96.png",
+        "/Coordinate/assets/qrcode.svg"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/Coordinate/assets/compass.png": "e07777b3b5f84694f92f169ec32137856f06858a",
+    "/Coordinate/assets/icons/icon-128x128.png": "42bddb30845155666c23d84259e829ab249e40e3",
+    "/Coordinate/assets/icons/icon-144x144.png": "e6f3521c79630b0859dfd02d787c25b73c7d44b7",
+    "/Coordinate/assets/icons/icon-152x152.png": "47ea87ad69e81051de67ed9069106c956cf28ab3",
+    "/Coordinate/assets/icons/icon-192x192.png": "a2248e903a7b806745323f7403dc5001e89fd322",
+    "/Coordinate/assets/icons/icon-384x384.png": "ceafbb1c97d66e8cbedca4b4bc859f4fc5cbea97",
+    "/Coordinate/assets/icons/icon-512x512.png": "b69ac6f6369fe9a699f326ee65b0394d1d493b27",
+    "/Coordinate/assets/icons/icon-72x72.png": "bf315c77069aa86c48cb954a2c7ef15c746f59b9",
+    "/Coordinate/assets/icons/icon-96x96.png": "65a9e7580b0da20b1570a4dac96d33a76a2ad77b",
+    "/Coordinate/assets/qrcode.svg": "2f7399b757ed02bb206d3d003d17e2d29b9547b3",
+    "/Coordinate/index.html": "3a04ed9fed840f75fbaf4f9038545ce9eb728d1c",
+    "/Coordinate/main.5337bc4eccde0bf6cbc0.js": "8e31fc1adefe0e1be19d03459c6362b3f01832ae",
+    "/Coordinate/manifest.webmanifest": "917cef198469f08d2f5667207926aae11a4d2c10",
+    "/Coordinate/polyfills.00096ed7d93ed26ee6df.js": "cfe7b0b53e96bff9ba384b4d497c08475a617d62",
+    "/Coordinate/runtime.7b63b9fd40098a2e8207.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "/Coordinate/styles.35cf4cc19d69a36edcb4.css": "fecb182e761acba0970d0013bed96f827ef5d6b9"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
