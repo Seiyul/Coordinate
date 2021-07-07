@@ -49,6 +49,10 @@ export class AppComponent implements OnInit {
         return this._global.isMobile();
     }
 
+    get isWatchPositionTurnedOn(): boolean {
+        return this._gps.getIsWatchPositionTurnedOn()
+    }
+
     constructor(
         private _router: Router,
         public dialog: MatDialog,

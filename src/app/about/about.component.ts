@@ -20,6 +20,8 @@ export class AboutComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        this._http.get('https://seiyul.github.io/Coordinate/timestamp.txt', { responseType: 'text' }).subscribe((data: any) => {
+            this._global.setLatestVersion(data);
+        });
     }
 }

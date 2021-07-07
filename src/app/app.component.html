@@ -5,11 +5,13 @@
     </button>
     <span class="toolbarSpacer"></span>
 
-    <button mat-icon-button [routerLink]="['/settings']">
+    <button mat-icon-button [routerLink]="['/home']" *ngIf="isWatchPositionTurnedOn">
         <div class="blob green"></div>
     </button>
 
-    <div class="blob red"></div>
+    <button mat-icon-button [routerLink]="['/home']" *ngIf="!isWatchPositionTurnedOn">
+        <div class=" blob red"></div>
+    </button>
     <button mat-raised-button color="warn" class="exitButton" (click)="closeModal()" *ngIf="!block">
         <mat-icon>
             logout
