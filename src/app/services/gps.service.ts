@@ -24,6 +24,7 @@ export class GpsService {
     stopWatchPosition(): void {
         this.isWatchPositionTurnedOn = false;
         navigator.geolocation.clearWatch(this.watchPosition);
+        this.watchPosition = null;
     }
 
     getPosition(): any {

@@ -29,11 +29,11 @@ export class HomeComponent implements OnInit {
 
     }
 
-    stop(): void {
+    stopGPS(): void {
         this._gps.stopWatchPosition();
     }
 
-    start(): void {
+    startGPS(): void {
         this._gps.startWatchPosition();
     }
 
