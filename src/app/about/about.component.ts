@@ -15,9 +15,11 @@ export class AboutComponent implements OnInit {
         private _global: GlobalService
     ) { }
 
-    version: any;
+    get version(): any {
+        return this._global.getLatestVersion();
+    }
 
     ngOnInit(): void {
-        this.version = this._global.getLatestVersion();
+
     }
 }

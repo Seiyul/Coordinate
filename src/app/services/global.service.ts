@@ -100,5 +100,20 @@ export class GlobalService {
 
     setLatestVersion(version: any): void {
         this.version = version;
+
+        // const latestVersion = localStorage.getItem('latestVersion') as string;
+
+        // let latestVersionDate: any;
+        // let recentVersionDate: any;
+
+        // if (latestVersion !== null && latestVersion !== undefined && latestVersion !== '') {
+        //     latestVersionDate = new Date(latestVersion).getTime();
+        //     recentVersionDate = new Date(version).getTime();
+        //     if (latestVersionDate > recentVersionDate) {
+        //         window.location.reload(true);
+        //     }
+        // }
+
+        localStorage.setItem('latestVersion', this.version);
     }
 }

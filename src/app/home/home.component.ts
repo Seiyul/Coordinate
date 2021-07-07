@@ -1,15 +1,40 @@
 import { Component, OnInit } from '@angular/core';
+import { GpsService } from '../services/gps.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+    constructor(
+        private _gps: GpsService
+    ) { }
 
-  ngOnInit(): void {
-  }
+    get position(): any {
+        const toReturn = this._gps.getPosition();
+        return toReturn;
+    }
+
+    get watchPosition(): any {
+        return this._gps.getWatchPosition();
+    }
+
+    get isWatchPositionTurnedOn(): boolean {
+        return this._gps.getIsWatchPositionTurnedOn();
+    }
+
+    ngOnInit(): void {
+
+    }
+
+    stop(): void {
+        this._gps.stopWatchPosition();
+    }
+
+    start(): void {
+        this._gps.startWatchPosition();
+    }
 
 }

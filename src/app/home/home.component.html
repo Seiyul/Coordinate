@@ -1,1 +1,52 @@
-<p>home works!</p>
+<p>Primera toma de contacto</p>
+<ng-container *ngIf="position && isWatchPositionTurnedOn">
+    <div>
+        <mat-icon>label_important</mat-icon>
+        <span>accuracy → {{ position.accuracy }}</span>
+    </div>
+    <div>
+        <mat-icon>label_important</mat-icon>
+        <span>altitude → {{ position.latitude }}</span>
+    </div>
+    <div>
+        <mat-icon>label_important</mat-icon>
+        <span>altitudeAccuracy → {{ position.altitudeAccuracy }}</span>
+    </div>
+    <div>
+        <mat-icon>label_important</mat-icon>
+        <span>heading → {{ position.heading }}</span>
+    </div>
+    <div>
+        <mat-icon>label_important</mat-icon>
+        <span>latitude → {{ position.latitude }}</span>
+    </div>
+    <div>
+        <mat-icon>label_important</mat-icon>
+        <span>longitude → {{ position.longitude }}</span>
+    </div>
+    <div>
+        <mat-icon>label_important</mat-icon>
+        <span>speed → {{ position.speed }}</span>
+    </div>
+</ng-container>
+<p></p>
+<div>
+    <button mat-raised-button (click)="stop()" color="warn" *ngIf="isWatchPositionTurnedOn">
+        <mat-icon>
+            stop
+        </mat-icon>
+        <span>
+            Parar
+        </span>
+    </button>
+
+
+    <button mat-raised-button (click)="start()" color="primary" *ngIf="!isWatchPositionTurnedOn">
+        <mat-icon>
+            bolt
+        </mat-icon>
+        <span>
+            Empezar
+        </span>
+    </button>
+</div>

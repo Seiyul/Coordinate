@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { GlobalService } from './services/global.service';
+import { GpsService } from './services/gps.service';
 
 
 @Component({
@@ -20,8 +21,6 @@ export class AppComponent implements OnInit {
     block = false;
 
     isPwa = false;
-
-    hasServiceWorkerReady = false;
 
     version: any;
 
@@ -55,7 +54,8 @@ export class AppComponent implements OnInit {
         public dialog: MatDialog,
         private _global: GlobalService,
         public snackbar: MatSnackBar,
-        private _http: HttpClient
+        private _http: HttpClient,
+        private _gps: GpsService
     ) {
         if (this._global.blockBrowser()) {
             this.block = true;
@@ -66,14 +66,8 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         this.installPwa();
         this.checkIfComesFromPwa();
-
-        navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-            this.hasServiceWorkerReady = true;
-        }).catch(() => {
-            this.hasServiceWorkerReady = false;
-        });
-
         this.setVersion();
+        this.startNavigation();
     }
 
     routerChange(event: any): void {
@@ -114,9 +108,11 @@ export class AppComponent implements OnInit {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult: any) => {
                     if (choiceResult.outcome === 'accepted') {
-                        this._global.setSnackbarTimer(2500);
+                        this._global.setSnackbarTimer(3500);
                         this._global.setSnackbarText('Gracias por instalar la aplicación');
                         this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
+                        localStorage.setItem('hasInstalledApp', 'true');
+                        this.isPwa = true;
                     } else {
                         console.log('User dismissed the A2HS prompt');
                     }
@@ -133,14 +129,21 @@ export class AppComponent implements OnInit {
     }
 
     setVersion(): void {
-        if (environment.production) {
-            const url = window.location.origin + '/Coordinate/' + 'timestamp.txt';
-            this._http.get(url).subscribe((response: any) => {
-                this._global.setLatestVersion(response);
-            });
-        }
-        else {
-            this._global.setLatestVersion('Local');
-        }
+        // if (environment.production) {
+        //     const url = window.location.origin + '/Coordinate/' + 'timestamp.txt';
+        //     this._http.get(url, { responseType: 'text' as 'json' }).subscribe((response: any) => {
+        //         this._global.setLatestVersion(response);
+        //     }, (err: any) => {
+        //         this._global.setLatestVersion('Error: ' + err);
+        //     });
+        // }
+        // else {
+        //     this._global.setLatestVersion('Local');
+        // }
+        this._global.setLatestVersion('Work in process');
+    }
+
+    startNavigation(): void {
+        this._gps.startWatchPosition();
     }
 }

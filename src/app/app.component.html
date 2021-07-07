@@ -4,6 +4,12 @@
         <span class="coordinateText" *ngIf="!block">{{ title }}</span>
     </button>
     <span class="toolbarSpacer"></span>
+
+    <button mat-icon-button [routerLink]="['/settings']">
+        <div class="blob green"></div>
+    </button>
+
+    <div class="blob red"></div>
     <button mat-raised-button color="warn" class="exitButton" (click)="closeModal()" *ngIf="!block">
         <mat-icon>
             logout
@@ -27,8 +33,7 @@
                     </span>
                 </div>
             </mat-list-option>
-            <mat-list-option class="add-button" [ngClass]="{'disabledColor': isPwa}" *ngIf="hasServiceWorkerReady"
-                (click)="installPwa()" [value]="null" [disabled]="isPwa">
+            <mat-list-option class="add-button" [ngClass]="{'disabledColor': isPwa}" [value]="null" [disabled]="isPwa">
                 <div>
                     <mat-icon>
                         {{ isPwa ? 'check_circle' : 'offline_bolt' }}
