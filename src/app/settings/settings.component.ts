@@ -12,6 +12,8 @@ export class SettingsComponent implements OnInit {
         return this._gps.getIsWatchPositionTurnedOn();
     }
 
+    showSpinner = false;
+
     constructor(
         private _gps: GpsService
     ) { }
@@ -24,7 +26,26 @@ export class SettingsComponent implements OnInit {
     }
 
     startGPS(): void {
-        this._gps.startWatchPosition();
+        this.showSpinner = true;
+        setTimeout(() => {
+            this._gps.startWatchPosition();
+        }, 1000);
+    }
+
+    get position(): any {
+        if (this._gps.getPosition()) {
+            this.showSpinner = false;
+        }
+        return this._gps.getPosition();
+    }
+
+    goToGoogleMaps(): void {
+        const latitude = this.position.latitude;
+        const longitude = this.position.longitude;
+
+        const url = 'https://www.google.com/maps/search/?api=1&query=' + latitude + '%2C' + longitude;
+
+        window.open(url, '_blank');
     }
 
 

@@ -1,26 +1,97 @@
 <div class="main-div">
-
-
     <div class="verticalCenter">
-        <div class="buttons">
-            <button mat-raised-button color="accent" (click)="stopGPS()" [disabled]="!isWatchPositionTurnedOn">
-                <mat-icon>
-                    stop
-                </mat-icon>
-                <span>
-                    Apagar GPS
-                </span>
-            </button>
-        </div>
-        <div class="buttons">
-            <button mat-raised-button color="primary" (click)="startGPS()" [disabled]="isWatchPositionTurnedOn">
-                <mat-icon>
-                    bolt
-                </mat-icon>
-                <span>
-                    Encender GPS
-                </span>
-            </button>
-        </div>
+        <mat-card class="parentCard"
+            [ngClass]="{'parentCardOn': isWatchPositionTurnedOn, 'parentCardOff': !isWatchPositionTurnedOn}">
+            <div class="buttons">
+                <button mat-raised-button color="accent" (click)="stopGPS()" [disabled]="!isWatchPositionTurnedOn">
+                    <mat-icon>
+                        stop
+                    </mat-icon>
+                    <span>
+                        Apagar GPS
+                    </span>
+                </button>
+            </div>
+            <div class="buttons">
+                <button mat-raised-button color="primary" (click)="startGPS()" [disabled]="isWatchPositionTurnedOn">
+                    <mat-icon>
+                        bolt
+                    </mat-icon>
+                    <span>
+                        Encender GPS
+                    </span>
+                </button>
+            </div>
+            <mat-card *ngIf="isWatchPositionTurnedOn" class="buttons">
+                <div class="title">
+                    <mat-icon>
+                        explore
+                    </mat-icon>
+                    <span>
+                        Ubicación actual
+                    </span>
+                </div>
+                <div *ngIf="position">
+                    <div *ngIf="position.latitude && position.longitude">
+                        <mat-icon>
+                            place
+                        </mat-icon>
+                        <span>
+                            {{ position.latitude }}, {{ position.longitude }}
+                        </span>
+                    </div>
+                    <div *ngIf="position.speed">
+                        <mat-icon>
+                            speed
+                        </mat-icon>
+                        <span>
+                            {{ position.speed }} km/h
+                        </span>
+                    </div>
+                    <div *ngIf="position.accuracy">
+                        <mat-icon>
+                            settings_ethernet
+                        </mat-icon>
+                        <span>
+                            ±{{ position.accuracy }} m
+                        </span>
+                    </div>
+                    <div *ngIf="position.altitude">
+                        <mat-icon>
+                            height
+                        </mat-icon>
+                        <span>
+                            {{ position.altitude }} m
+                        </span>
+                    </div>
+
+                    <div class="buttons" *ngIf="position.latitude && position.longitude">
+                        <button mat-raised-button class="googleMaps" (click)="goToGoogleMaps()">
+                            <mat-icon>
+                                map
+                            </mat-icon>
+                            <span>
+                                Ver en Google Maps
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card *ngIf="!isWatchPositionTurnedOn" class="buttons">
+                <div class="titleGpsOff" *ngIf="!showSpinner">
+                    <mat-icon>
+                        wrong_location
+                    </mat-icon>
+                    <span>
+                        Ubicación desactivada
+                    </span>
+                </div>
+                <div class="wrapper">
+                    <div *ngIf="showSpinner" class="inner">
+                        <mat-spinner></mat-spinner>
+                    </div>
+                </div>
+            </mat-card>
+        </mat-card>
     </div>
 </div>

@@ -1,19 +1,60 @@
-.main-div{
+.main-div {
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: darkgray;
-  }
+}
 
-  .verticalCenter {
+.verticalCenter {
     margin: 0;
     position: absolute;
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
-  }
+}
 
-  .buttons {
-      margin: 10px;
-  }
+.buttons {
+      margin-top: 10px;
+      margin-bottom: 10px;
+}
+  
+.title {
+    margin-bottom: 15px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.titleGpsOff {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.wrapper {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+  
+.inner {
+    padding: 12px;
+}
+
+.parentCardOn {
+      background-color: rgba(51, 217, 178, 1);
+}
+
+.parentCardOff {
+    background-color: rgba(255, 82, 82, 1);
+}
+
+.googleMaps {
+    /* The old syntax, deprecated, but still needed, prefixed, for Opera and WebKit-based browsers */
+// background: -prefix-linear-gradient(left, red, yellow, green, blue);
+
+/* The new syntax needed by standard-compliant browsers (IE 10 and Firefox 10 onwards), without prefix */
+// background: linear-gradient(to right, red,  yellow, green, blue)
+
+background: -prefix-linear-gradient(left, rgb(255, 196, 0), red);
+background: linear-gradient(to right, rgb(255, 196, 0), red)
+}
