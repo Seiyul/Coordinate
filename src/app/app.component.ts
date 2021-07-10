@@ -24,26 +24,9 @@ export class AppComponent implements OnInit {
 
     version: any;
 
-    linkList = [{
-        name: 'Inicio',
-        icon: 'home',
-        link: '/home'
-    },
-    {
-        name: 'Crear partida',
-        icon: 'add_circle_outline',
-        link: '/create'
-    },
-    {
-        name: 'Ajustes',
-        icon: 'settings',
-        link: '/settings'
-    },
-    {
-        name: 'Acerca de',
-        icon: 'help',
-        link: '/about'
-    }];
+    dateToPrint: string = '';
+
+    linkList: any;
 
     get isMobile(): boolean {
         return this._global.isMobile();
@@ -70,8 +53,10 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         this.installPwa();
         this.checkIfComesFromPwa();
-        this.setVersion();
-        this.startNavigation();
+        // this.startNavigation();
+        this.lockOrientationScreen();
+        this.refreshDate();
+        this.linkList = this._global.getLinkList();
     }
 
     routerChange(event: any): void {
@@ -82,6 +67,17 @@ export class AppComponent implements OnInit {
 
     isCurrentLink(link: any): boolean {
         return this._router.url === link;
+    }
+
+    lockOrientationScreen(): void {
+        screen.orientation.lock('portrait').then(
+            (success: any) => {
+                console.log('Success', success);
+            },
+            (error: any) => {
+                console.log('Error: ', error);
+            }
+        );
     }
 
 
@@ -132,22 +128,21 @@ export class AppComponent implements OnInit {
         );
     }
 
-    setVersion(): void {
-        // if (environment.production) {
-        //     const url = window.location.origin + '/Coordinate/' + 'timestamp.txt';
-        //     this._http.get(url, { responseType: 'text' as 'json' }).subscribe((response: any) => {
-        //         this._global.setLatestVersion(response);
-        //     }, (err: any) => {
-        //         this._global.setLatestVersion('Error: ' + err);
-        //     });
-        // }
-        // else {
-        //     this._global.setLatestVersion('Local');
-        // }
-        this._global.setLatestVersion('Work in process');
-    }
-
     startNavigation(): void {
         this._gps.startWatchPosition();
+    }
+
+    refreshDate(): void {
+        this.dateToPrint = this.date();
+        setTimeout(() => {
+            this.refreshDate();
+        }, 1000);
+    }
+
+    date(): string {
+        const date = new Date();
+        return (date.getHours() < 10 ? ('0' + date.getHours()) : date.getHours()) + ':' +
+            (date.getMinutes() < 10 ? ('0' + date.getMinutes()) : date.getMinutes()) + ':' +
+            (date.getSeconds() < 10 ? ('0' + date.getSeconds()) : date.getSeconds())
     }
 }

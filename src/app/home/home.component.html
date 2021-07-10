@@ -1,52 +1,36 @@
-<p>Primera toma de contacto</p>
-<ng-container *ngIf="position && isWatchPositionTurnedOn">
-    <div>
-        <mat-icon>label_important</mat-icon>
-        <span>accuracy → {{ position.accuracy }}</span>
-    </div>
-    <div>
-        <mat-icon>label_important</mat-icon>
-        <span>altitude → {{ position.latitude }}</span>
-    </div>
-    <div>
-        <mat-icon>label_important</mat-icon>
-        <span>altitudeAccuracy → {{ position.altitudeAccuracy }}</span>
-    </div>
-    <div>
-        <mat-icon>label_important</mat-icon>
-        <span>heading → {{ position.heading }}</span>
-    </div>
-    <div>
-        <mat-icon>label_important</mat-icon>
-        <span>latitude → {{ position.latitude }}</span>
-    </div>
-    <div>
-        <mat-icon>label_important</mat-icon>
-        <span>longitude → {{ position.longitude }}</span>
-    </div>
-    <div>
-        <mat-icon>label_important</mat-icon>
-        <span>speed → {{ position.speed }}</span>
-    </div>
-</ng-container>
+<div class="main-div">
+    <mat-card class="example-card">
+        <div class="title">
+            <mat-icon>
+                home
+            </mat-icon>
+            <span>
+                Menú principal
+            </span>
+        </div>
+        <mat-selection-list #shoes [multiple]="false" (selectionChange)="this.routerChange($event)">
+            <mat-list-option *ngFor="let link of linkList" [value]="link.link" [disabled]="link.name === 'Inicio'"
+                [ngClass]="{'disabledColor': link.name === 'Inicio'}">
+                <div>
+                    <mat-icon>
+                        {{link.icon}}
+                    </mat-icon>
+                    <span>
+                        {{link.name}}
+                    </span>
+                </div>
+            </mat-list-option>
 
-
-<div>
-    <button mat-raised-button (click)="stopGPS()" color="warn" *ngIf="isWatchPositionTurnedOn">
-        <mat-icon>
-            stop
-        </mat-icon>
-        <span>
-            Parar
-        </span>
-    </button>
-
-    <button mat-raised-button (click)="startGPS()" color="primary" *ngIf="!isWatchPositionTurnedOn">
-        <mat-icon>
-            bolt
-        </mat-icon>
-        <span>
-            Empezar
-        </span>
-    </button>
+            <mat-list-option class="add-button" [ngClass]="{'disabledColor': isPwa}" [value]="null" [disabled]="isPwa">
+                <div>
+                    <mat-icon>
+                        {{ isPwa ? 'check_circle' : 'offline_bolt' }}
+                    </mat-icon>
+                    <span>
+                        {{ isPwa ? 'Instalado' : 'Instalar' }}
+                    </span>
+                </div>
+            </mat-list-option>
+        </mat-selection-list>
+    </mat-card>
 </div>

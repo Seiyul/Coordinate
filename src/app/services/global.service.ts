@@ -13,7 +13,30 @@ export class GlobalService {
     // Default value 
     snackbarTimer: number = 5000;
     hideMatProcess = false;
+
     version: any;
+    versionDate: any;
+
+    list = [{
+        name: 'Inicio',
+        icon: 'home',
+        link: '/home'
+    },
+    {
+        name: 'Crear partida',
+        icon: 'add_circle_outline',
+        link: '/create'
+    },
+    {
+        name: 'Ajustes',
+        icon: 'settings',
+        link: '/settings'
+    },
+    {
+        name: 'Acerca de',
+        icon: 'help',
+        link: '/about'
+    }];
 
     constructor(
         private _router: Router,
@@ -45,6 +68,8 @@ export class GlobalService {
         this._router.navigate([route]);
     }
 
+    ////////////////////////////////////////////////////
+
     setSnackbarTimer(value: number): void {
         this.snackbarTimer = value;
     }
@@ -52,6 +77,8 @@ export class GlobalService {
     getSnackbarTimer(): number {
         return this.snackbarTimer;
     }
+
+    ////////////////////////////////////////////////////
 
     setSnackbarText(text: string): void {
         this.snackbarText = text;
@@ -61,6 +88,8 @@ export class GlobalService {
         return this.snackbarText;
     }
 
+    ////////////////////////////////////////////////////
+
     setHiddenMatProcess(value: boolean): void {
         this.hideMatProcess = value;
     }
@@ -68,6 +97,36 @@ export class GlobalService {
     getHiddenMatProcess(): boolean {
         return this.hideMatProcess;
     }
+
+    ////////////////////////////////////////////////////
+
+    getLatestVersion(): any {
+        return this.version;
+    }
+
+    setLatestVersion(version: any): void {
+        this.version = version;
+        localStorage.setItem('latestVersion', this.version);
+    }
+
+    ////////////////////////////////////////////////////
+
+    getLatestVersionDate(): any {
+        return this.versionDate;
+    }
+
+    setLatestVersionDate(versionDate: any): any {
+        this.versionDate = versionDate;
+        localStorage.setItem('latestVersionDate', this.versionDate);
+    }
+
+    ////////////////////////////////////////////////////
+
+    getLinkList(): any {
+        return this.list;
+    }
+
+    ////////////////////////////////////////////////////
 
     copyToClipboard(textToCopy: string) {
         const el = document.createElement('textarea');
@@ -94,26 +153,4 @@ export class GlobalService {
         this.copyToClipboard(coordinates[index]);
     }
 
-    getLatestVersion(): any {
-        return this.version;
-    }
-
-    setLatestVersion(version: any): void {
-        this.version = version;
-
-        // const latestVersion = localStorage.getItem('latestVersion') as string;
-
-        // let latestVersionDate: any;
-        // let recentVersionDate: any;
-
-        // if (latestVersion !== null && latestVersion !== undefined && latestVersion !== '') {
-        //     latestVersionDate = new Date(latestVersion).getTime();
-        //     recentVersionDate = new Date(version).getTime();
-        //     if (latestVersionDate > recentVersionDate) {
-        //         window.location.reload(true);
-        //     }
-        // }
-
-        localStorage.setItem('latestVersion', this.version);
-    }
 }

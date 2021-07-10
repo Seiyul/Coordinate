@@ -37,3 +37,29 @@
   .version {
       font-style: italic;
   }
+
+  .versionDiv {
+      background-color: aquamarine;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      margin-top: 15px;
+  }
+
+  .buildDateDiv {
+    background-color: rgb(193, 166, 255);
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .backButton {
+      margin-top: 15px;
+      margin-right: 25%;
+      margin-left: 25%;
+  }
+
+  .spinner {
+      margin: 30px;
+  }
+
+

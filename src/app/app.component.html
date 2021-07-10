@@ -1,24 +1,23 @@
 <mat-toolbar class="toolbar" color="primary" style="width: 100%;">
     <button mat-button [disabled]="block" (click)="drawer.toggle()" class="mainButton">
         <img src="./assets/compass.png" width="48px" height="48px" />
-        <span class="coordinateText" *ngIf="!block">{{ title }}</span>
+        <!-- <span class="coordinateText" *ngIf="!block">{{ title }}</span> -->
     </button>
     <span class="toolbarSpacer"></span>
+    <span>{{ dateToPrint }}</span>
+    <span class="toolbarSpacer"></span>
 
-    <button mat-icon-button [routerLink]="['/home']" *ngIf="isWatchPositionTurnedOn">
+    <button mat-icon-button [routerLink]="['/settings']" *ngIf="isWatchPositionTurnedOn">
         <div class="blob green"></div>
     </button>
 
-    <button mat-icon-button [routerLink]="['/home']" *ngIf="!isWatchPositionTurnedOn">
-        <div class=" blob red"></div>
+    <button mat-icon-button [routerLink]="['/settings']" *ngIf="!isWatchPositionTurnedOn">
+        <div class="blob red"></div>
     </button>
     <button mat-raised-button color="warn" class="exitButton" (click)="closeModal()" *ngIf="!block">
         <mat-icon>
             logout
         </mat-icon>
-        <span>
-            Salir
-        </span>
     </button>
 </mat-toolbar>
 <mat-drawer-container [ngClass]="{'sidenavContainer': isMobile, 'sidenavContainerPC': !isMobile}" [hasBackdrop]="true">

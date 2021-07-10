@@ -1,0 +1,19 @@
+.main-div{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: darkgray;
+  }
+
+  .verticalCenter {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+  .buttons {
+      margin: 10px;
+  }

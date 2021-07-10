@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { GlobalService } from '../services/global.service';
 import { GpsService } from '../services/gps.service';
 
 @Component({
@@ -9,7 +11,9 @@ import { GpsService } from '../services/gps.service';
 export class HomeComponent implements OnInit {
 
     constructor(
-        private _gps: GpsService
+        private _gps: GpsService,
+        private _global: GlobalService,
+        private _router: Router
     ) { }
 
     get position(): any {
@@ -25,16 +29,20 @@ export class HomeComponent implements OnInit {
         return this._gps.getIsWatchPositionTurnedOn();
     }
 
+    linkList: any;
+
+    isPwa: boolean = false;
+
     ngOnInit(): void {
-
+        this.linkList = this._global.getLinkList();
+        this.isPwa = ["fullscreen", "standalone", "minimal-ui"].some(
+            (displayMode) => window.matchMedia('(display-mode: ' + displayMode + ')').matches
+        );
     }
-
-    stopGPS(): void {
-        this._gps.stopWatchPosition();
-    }
-
-    startGPS(): void {
-        this._gps.startWatchPosition();
+    routerChange(event: any): void {
+        if (event?.option?.value) {
+            this._router.navigate([event.option.value]);
+        }
     }
 
 }

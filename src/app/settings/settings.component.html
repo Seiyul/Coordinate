@@ -1,1 +1,26 @@
-<p>settings works!</p>
+<div class="main-div">
+
+
+    <div class="verticalCenter">
+        <div class="buttons">
+            <button mat-raised-button color="accent" (click)="stopGPS()" [disabled]="!isWatchPositionTurnedOn">
+                <mat-icon>
+                    stop
+                </mat-icon>
+                <span>
+                    Apagar GPS
+                </span>
+            </button>
+        </div>
+        <div class="buttons">
+            <button mat-raised-button color="primary" (click)="startGPS()" [disabled]="isWatchPositionTurnedOn">
+                <mat-icon>
+                    bolt
+                </mat-icon>
+                <span>
+                    Encender GPS
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
