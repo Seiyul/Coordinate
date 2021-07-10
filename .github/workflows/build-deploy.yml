@@ -36,6 +36,8 @@ jobs:
         run: |
           cd dist
           cd Coordinate
+          touch version.txt
+          echo ${{github.run_number}} | tee version.txt
           date -u +"%Y-%m-%dT%H:%M:%SZ" > timestamp.txt
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
