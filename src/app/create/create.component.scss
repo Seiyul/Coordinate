@@ -49,7 +49,7 @@
 
 .buttons {
     margin-left: 15px;
-    margin-top: 35px;
+    margin-top: 30px;
 }
 
 .endButtons {
@@ -79,4 +79,25 @@
 .cleanMiniFab {
     margin-left: 15px;
     vertical-align: middle;
+}
+
+.modificable {
+    background-color: rgb(255, 200, 129);
+    border-radius: 10px;
+    width: 235px;
+    text-align: center;
+    border: 1px solid rgb(150, 150, 150);
+}
+
+.partida {
+    background-color: rgb(150, 253, 150);
+    border-radius: 10px;
+    width: 235px;
+    text-align: center;
+    border: 1px solid rgb(150, 150, 150);
+}
+
+.miniHelp {
+    margin-top: 4px;
+    font-size: 14px;
 }

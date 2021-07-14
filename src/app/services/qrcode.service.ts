@@ -8,8 +8,8 @@ export class QrcodeService {
 
     constructor() { }
 
-    convertURLtoQR = (data: any) => {
-        const href = this.getUrl(data);
+    convertURLtoQR = (data: any, modificable: boolean) => {
+        const href = this.getUrl(data, modificable);
         return new Promise((resolve, reject) => {
             this.qrcode.toDataURL(href, { errorCorrectionLevel: 'Q' })
                 .then((url: any) => {
@@ -21,8 +21,11 @@ export class QrcodeService {
         });
     }
 
-    getUrl(data: any): string {
+    getUrl(data: any, modificable: boolean): string {
         let href = window.location.href;
+        if (!modificable) {
+            href = href.replace('create', 'play');
+        }
         const base64 = window.btoa(JSON.stringify(data));
         href = href + '?session=' + base64;
         return href;

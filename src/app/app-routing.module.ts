@@ -4,6 +4,7 @@ import { AboutComponent } from './about/about.component';
 import { BlockedComponent } from './blocked/blocked.component';
 import { CreateComponent } from './create/create.component';
 import { HomeComponent } from './home/home.component';
+import { PlayComponent } from './play/play.component';
 import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
     { path: 'create', component: CreateComponent },
     { path: 'blocked', component: BlockedComponent },
     { path: 'about', component: AboutComponent },
+    { path: 'play', component: PlayComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

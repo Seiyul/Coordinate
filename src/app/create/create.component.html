@@ -1,6 +1,6 @@
 <div class="parent">
     <h1 class="formElement">
-        {{ this.receivedSession ? 'Consultar partida' : 'Crear partida' }}
+        {{ this.receivedSession ? 'Editar partida' : 'Crear partida' }}
         <button mat-mini-fab color="warn" class="cleanMiniFab" (click)="clearSession()" *ngIf="this.receivedSession">
             <mat-icon>
                 delete
@@ -13,8 +13,7 @@
                 <div [formGroupName]="i">
                     <div>
                         <span class="ubicacionText">Ubicación {{i + 1}}</span>
-                        <button mat-raised-button color="primary" class="pasteButton" (click)="pasteCoordinates(i)"
-                            [disabled]="this.receivedSession">
+                        <button mat-raised-button color="primary" class="pasteButton" (click)="pasteCoordinates(i)">
                             <span>
                                 Pegar desde
                             </span>
@@ -22,8 +21,7 @@
                                 map
                             </mat-icon>
                         </button>
-                        <button mat-mini-fab color="warn" class="deleteButton" (click)="removePlace(i)" *ngIf="i !== 0"
-                            [disabled]="this.receivedSession">
+                        <button mat-mini-fab color="warn" class="deleteButton" (click)="removePlace(i)" *ngIf="i !== 0">
                             <mat-icon>close</mat-icon>
                         </button>
                     </div>
@@ -75,7 +73,7 @@
         </div>
 
         <div class="formElement">
-            <button mat-raised-button color="accent" (click)="addPlace()" [disabled]="this.receivedSession">
+            <button mat-raised-button color="accent" (click)="addPlace()">
                 <mat-icon>
                     add_circle
                 </mat-icon>
@@ -174,18 +172,15 @@
             </mat-form-field>
         </div>
 
-        <div class="buttons">
-            <!-- Deshabilitado hasta completar la funcionalidad -->
-            <button mat-raised-button color="primary" class="endButtons" disabled (click)="print()">
-                <mat-icon>
-                    save
+        <div class="buttons modificable">
+            <div>
+                <span>Modificable</span>
+                <mat-icon (click)="helpButton()" class="miniHelp">
+                    help
                 </mat-icon>
-                <span>
-                    Disabled
-                </span>
-            </button>
+            </div>
             <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
-                (click)="generateImage()">
+                (click)="generateImage(true)">
                 <mat-icon>
                     qr_code_2
                 </mat-icon>
@@ -193,7 +188,32 @@
                     QR
                 </span>
             </button>
-            <button mat-raised-button class="endButtons" [disabled]="form.invalid" (click)="getLink()">
+            <button mat-raised-button class="endButtons" [disabled]="form.invalid" (click)="getLink(true)">
+                <mat-icon>
+                    link
+                </mat-icon>
+                <span>
+                    Link
+                </span>
+            </button>
+        </div>
+        <div class="buttons partida">
+            <div>
+                <span>Partida</span>
+                <mat-icon (click)="helpButton()" class="miniHelp">
+                    help
+                </mat-icon>
+            </div>
+            <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
+                (click)="generateImage(false)">
+                <mat-icon>
+                    qr_code_2
+                </mat-icon>
+                <span>
+                    QR
+                </span>
+            </button>
+            <button mat-raised-button class="endButtons" [disabled]="form.invalid" (click)="getLink(false)">
                 <mat-icon>
                     link
                 </mat-icon>

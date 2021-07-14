@@ -13,6 +13,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AboutComponent } from './about/about.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PlayComponent } from './play/play.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { HttpClientModule } from '@angular/common/http';
         CreateComponent,
         BlockedComponent,
         CustomSnackbarComponent,
-        AboutComponent
+        AboutComponent,
+        PlayComponent
     ],
     imports: [
         BrowserModule,

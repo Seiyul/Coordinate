@@ -68,13 +68,14 @@ export class CreateComponent implements OnInit, AfterContentInit {
         return this._formBuilder.group({
             latitude: new FormControl('', [Validators.min(-90), Validators.max(90), Validators.required, Validators.maxLength(20), Validators.minLength(6)]),
             longitude: new FormControl('', [Validators.min(-180), Validators.max(180), Validators.required, Validators.maxLength(20), Validators.minLength(6)]),
-            description: new FormControl('')
+            description: new FormControl(''),
+            status: new FormControl('pending')
         })
     }
 
     addPlace(): void {
         this.coordinates.push(this.newPlace());
-        this.updateValueValidityTimers()
+        this.updateValueValidityTimers();
     }
 
     removePlace(index: any): void {
@@ -85,12 +86,8 @@ export class CreateComponent implements OnInit, AfterContentInit {
         }
     }
 
-    print(): void {
-        console.log(this.form.value);
-    }
-
-    generateImage(): void {
-        this._qrcode.convertURLtoQR(this.form.value)
+    generateImage(modificable: boolean): void {
+        this._qrcode.convertURLtoQR(this.form.value, modificable)
             .then((value) => {
                 this.imageSource = value;
             })
@@ -106,8 +103,8 @@ export class CreateComponent implements OnInit, AfterContentInit {
         this.receivedSession = null;
     }
 
-    getLink(): void {
-        const link = this._qrcode.getUrl(this.form.value);
+    getLink(modificable: boolean): void {
+        const link = this._qrcode.getUrl(this.form.value, modificable);
         this._global.copyToClipboard(link);
         this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
     }
@@ -173,7 +170,8 @@ export class CreateComponent implements OnInit, AfterContentInit {
             array.splice(index, 1, {
                 'latitude': latitude,
                 'longitude': longitude,
-                'description': 'Texto de ejemplo'
+                'description': 'Texto de ejemplo',
+                'status': 'pending'
             });
 
             this.form.get('coordinates')?.setValue(array);
@@ -219,9 +217,6 @@ export class CreateComponent implements OnInit, AfterContentInit {
             this.form.get('fullTimer')?.setValue(this.receivedSession.fullTimer);
             this.form.get('initialDateCheck')?.setValue(this.receivedSession.initialDateCheck);
             this.form.get('initialDate')?.setValue(this.receivedSession.initialDate);
-
-            this.form.disable();
-
         }
         else {
             this.clearQueryParam();

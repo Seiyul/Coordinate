@@ -1,0 +1,18 @@
+<div class="main-div">
+    <mat-card class="example-card">
+        <div class="title">
+            <mat-icon class="redIcon">
+                info
+            </mat-icon>
+            <span class="redText">
+                Información
+            </span>
+        </div>
+        <ng-container *ngIf="receivedSession">
+            <p>{{ receivedSession.initialDate }}</p>
+        </ng-container>
+        <ng-container>
+            <p>{{ this.time | json }}</p>
+        </ng-container>
+    </mat-card>
+</div>
