@@ -34,6 +34,7 @@ export class CreateComponent implements OnInit, AfterContentInit {
 
 
     form = this._formBuilder.group({
+        name: new FormControl('',[Validators.required, Validators.maxLength(20)]),
         coordinates: new FormArray([]),
         errorMargin: new FormControl(''),
         partialTimerCheck: new FormControl(false),

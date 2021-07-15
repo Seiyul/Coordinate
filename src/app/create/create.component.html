@@ -8,6 +8,23 @@
         </button>
     </h1>
     <form [formGroup]="form">
+        <div class="formElement">
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre de la partida</mat-label>
+                <input matInput placeholder="Nombre de la partida" formControlName="name">
+                <button matSuffix mat-icon-button (click)="helpButton()">
+                    <mat-icon class="helpIcon">
+                        help
+                    </mat-icon>
+                </button>
+                <mat-hint>
+                    <div>
+                        Nombre que le quieras dar a la partida
+                    </div>
+                </mat-hint>
+            </mat-form-field>
+        </div>
+
         <div formArrayName="coordinates">
             <div *ngFor="let place of coordinates.controls; let i = index;" class="formElement">
                 <div [formGroupName]="i">
@@ -172,6 +189,7 @@
             </mat-form-field>
         </div>
 
+        <ng-container class="marginTop">
         <div class="buttons modificable">
             <div>
                 <span>Modificable</span>
@@ -222,24 +240,8 @@
                 </span>
             </button>
         </div>
+    </ng-container>
     </form>
-
-    <!-- Versión provisional, no se quedará en el resultado final -->
-    <!-- <ng-container>
-
-        <div class="formElement" *ngIf="receivedSession">
-            <h2>Sesión recibida</h2>
-            <pre>{{ receivedSession | json }}</pre>
-        </div>
-
-        <div class="formElement" *ngIf="receivedSession">
-            <div class="saveButton">
-                <button mat-raised-button color="accent" (click)="clearQueryParam()">Volver</button>
-            </div>
-        </div>
-
-    </ng-container> -->
-
 
     <ng-container *ngIf="imageSource">
         <img [src]="imageSource" width="100%" />

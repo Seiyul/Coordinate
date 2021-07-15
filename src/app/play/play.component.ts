@@ -1,6 +1,7 @@
 import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../services/global.service';
+import { GpsService } from '../services/gps.service';
 
 @Component({
     selector: 'app-play',
@@ -11,7 +12,8 @@ export class PlayComponent implements OnInit, AfterContentInit {
 
     constructor(
         private _activatedRoute: ActivatedRoute,
-        private _global: GlobalService
+        private _global: GlobalService,
+        private _gps: GpsService
     ) { }
 
     receivedSession: any;
@@ -27,6 +29,8 @@ export class PlayComponent implements OnInit, AfterContentInit {
         seconds: 0
     };
 
+    isTimeFinished = false;
+
     ngOnInit(): void {
     }
 
@@ -41,7 +45,8 @@ export class PlayComponent implements OnInit, AfterContentInit {
     setReceivedSession(params: any): void {
         this.receivedSession = JSON.parse(window.atob(params.session));
 
-        if (this.receivedSession.hasOwnProperty('coordinates') &&
+        if (this.receivedSession.hasOwnProperty('name') &&
+            this.receivedSession.hasOwnProperty('coordinates') &&
             this.receivedSession.hasOwnProperty('errorMargin') &&
             this.receivedSession.hasOwnProperty('partialTimerCheck') &&
             this.receivedSession.hasOwnProperty('partialTimer') &&
@@ -49,10 +54,13 @@ export class PlayComponent implements OnInit, AfterContentInit {
             this.receivedSession.hasOwnProperty('fullTimer') &&
             this.receivedSession.hasOwnProperty('initialDateCheck') &&
             this.receivedSession.hasOwnProperty('initialDate')) {
-            // Válido
             if (this.receivedSession.initialDateCheck) {
-                this.initialDate = this.receivedSession.initialDate + ':00.000';
-                this.compareCurrentDate();
+                this.initialDate = this.receivedSession.initialDate + ':01.000';
+                this.refreshDate();
+            }
+            else
+            {
+                this.isTimeFinished = true;
             }
         }
         else {
@@ -60,67 +68,44 @@ export class PlayComponent implements OnInit, AfterContentInit {
         }
     }
 
-    compareCurrentDate(): void {
-        this.refreshDate();
-    }
-
     refreshDate(): void {
-        // let currentDate = new Date().getTime();
-        // const offsetCurrent = new Date(currentDate).getTimezoneOffset();
-        // currentDate = new Date(currentDate).getTime() + (offsetCurrent * 60 * 1000);
-        // // const initialDate = new Date(this.initialDate).getTime();
-        // const offsetInitial = new Date(this.initialDate).getTimezoneOffset();
-        // const initialDate = new Date(this.initialDate).getTime() + (offsetInitial * 60 * 1000);
-        // console.log('currentDate -->', currentDate);
-        // console.log('initialDate -->', initialDate);
-        // console.log('offsetCurrent -->', offsetCurrent);
-        // console.log('offsetInitial -->', offsetInitial);
+        const countDownDate = new Date(this.initialDate).getTime();
 
+        const now = new Date().getTime();
+        const timeleft = countDownDate - now;
 
-
-
-        // if (initialDate < currentDate) {
-        //     this.dateToPrint = (currentDate - initialDate);
-        //     this.dateToPrint = this.date(this.dateToPrint);
-
-        //     setTimeout(() => {
-        //         this.refreshDate();
-        //     }, 1000);
-        // }
-        // else {
-        //     console.log('stop');
-        // }
-
-        var countDownDate = new Date(this.initialDate).getTime();
-
-        var now = new Date().getTime();
-        var timeleft = countDownDate - now;
-
-        // Calculating the days, hours, minutes and seconds left 
-        var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+        const days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
 
         this.time.days = days;
         this.time.hours = hours;
         this.time.minutes = minutes;
         this.time.seconds = seconds;
 
-
-
+        if (this.time.days <= 0 &&
+            this.time.hours <= 0 &&
+            this.time.minutes <= 0 &&
+            this.time.seconds <= 0)
+            {
+                this.isTimeFinished = true;
+            }    
+        else
+        {
+            this.isTimeFinished = false;
         setTimeout(() => {
             this.refreshDate();
         }, 1000);
-
+        }
     }
 
-    date(dateReceived?: any): string {
-        const date = new Date(dateReceived);
-        return (date.getHours() < 10 ? ('0' + date.getHours()) : date.getHours()) + ':' +
-            (date.getMinutes() < 10 ? ('0' + date.getMinutes()) : date.getMinutes()) + ':' +
-            (date.getSeconds() < 10 ? ('0' + date.getSeconds()) : date.getSeconds())
+    calculateFinalDate(): any {
+        const finalDateTime = new Date(this.initialDate).getTime() + (this.receivedSession.fullTimer * 60 * 1000);
+        return new Date(finalDateTime);
     }
 
-
+    start(): void {
+        this._gps.startWatchPosition();
+    }
 }
