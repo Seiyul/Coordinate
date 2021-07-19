@@ -1,5 +1,5 @@
 <mat-toolbar class="toolbar" color="primary" style="width: 100%;">
-    <button mat-button [disabled]="block" (click)="drawer.toggle()" class="mainButton">
+    <button mat-button [disabled]="block || isThereAnActiveSession" (click)="drawer.toggle()" class="mainButton">
         <img src="./assets/compass.png" width="48px" height="48px" />
         <!-- <span class="coordinateText" *ngIf="!block">{{ title }}</span> -->
     </button>
@@ -14,7 +14,8 @@
     <button mat-icon-button [routerLink]="['/settings']" *ngIf="!isWatchPositionTurnedOn">
         <div class="blob red"></div>
     </button>
-    <button mat-raised-button color="warn" class="exitButton" (click)="closeModal()" *ngIf="!block">
+    <button mat-raised-button color="warn" class="exitButton" (click)="closeModal()"
+        *ngIf="!block && isThereAnActiveSession">
         <mat-icon>
             logout
         </mat-icon>

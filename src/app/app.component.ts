@@ -28,6 +28,20 @@ export class AppComponent implements OnInit {
 
     linkList: any;
 
+    get isThereAnActiveSession(): any {
+        const session = this._global.getSession();
+        if (!session) {
+            return false;
+        }
+        else {
+            const currentPlace = window.location.href.split('/')[window.location.href.split('/').length - 1];
+            if (!currentPlace.includes('play') && !currentPlace.includes('settings')) {
+                this._global.goTo('/play');
+            }
+            return true;
+        }
+    }
+
     get isMobile(): boolean {
         return this._global.isMobile();
     }
@@ -57,6 +71,8 @@ export class AppComponent implements OnInit {
         this.lockOrientationScreen();
         this.refreshDate();
         this.linkList = this._global.getLinkList();
+        this.checkIfHasSession();
+        this._gps.startWatchPosition();
     }
 
     routerChange(event: any): void {
@@ -88,11 +104,10 @@ export class AppComponent implements OnInit {
         dialogRef.afterClosed().toPromise().then((res) => {
             this._global.setSnackbarTimer(2500);
             if (res) {
-                this._global.setSnackbarText('Botón de salir. Funcionalidad pendiente de implantación.');
-                this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
-            }
-            else {
-                this._global.setSnackbarText('Botón de permanecer. No hace nada.');
+                this._global.setSnackbarText('La partida se ha borrado correctamente.');
+                this._global.setSession(null);
+                localStorage.removeItem('session');
+                this._global.goTo('/home');
                 this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
             }
         });
@@ -144,5 +159,11 @@ export class AppComponent implements OnInit {
         return (date.getHours() < 10 ? ('0' + date.getHours()) : date.getHours()) + ':' +
             (date.getMinutes() < 10 ? ('0' + date.getMinutes()) : date.getMinutes()) + ':' +
             (date.getSeconds() < 10 ? ('0' + date.getSeconds()) : date.getSeconds())
+    }
+
+    checkIfHasSession(): void {
+        if (this._global.getSession()) {
+            this._global.goTo('/play');
+        }
     }
 }

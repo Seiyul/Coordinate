@@ -3,6 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../services/global.service';
 import { GpsService } from '../services/gps.service';
 import { Base64 } from 'js-base64';
+import { DialogComponent } from '../dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CustomSnackbarComponent } from '../custom-snackbar/custom-snackbar.component';
 
 @Component({
     selector: 'app-play',
@@ -14,7 +18,9 @@ export class PlayComponent implements OnInit, AfterContentInit {
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _global: GlobalService,
-        private _gps: GpsService
+        private _gps: GpsService,
+        private _dialog: MatDialog,
+        private _snackbar: MatSnackBar
     ) { }
 
     receivedSession: any;
@@ -28,6 +34,8 @@ export class PlayComponent implements OnInit, AfterContentInit {
         seconds: 0
     };
 
+    isAutostartEnabled = false;
+
 
     // Si se ha terminado la fecha de inicio
     isTimeFinished = false;
@@ -39,17 +47,14 @@ export class PlayComponent implements OnInit, AfterContentInit {
     hasAnActiveSession = false;
 
     ngOnInit(): void {
-        if (localStorage.getItem('currentSession') !== null) {
-            if (typeof localStorage.getItem('currentSession') === 'string') {
-                this.receivedSession = Base64.decode(localStorage.getItem('currentSession') as string);
-            }
-            this.checkReceivedSession();
+        if (!this._gps.getIsWatchPositionTurnedOn()) {
+            this._gps.startWatchPosition();
         }
     }
 
     saveCurrentGame(): void {
         const session = Base64.encode(this.receivedSession);
-        localStorage.setItem('currentSession', session)
+        localStorage.setItem('session', session)
     }
 
     ngAfterContentInit(): void {
@@ -58,7 +63,24 @@ export class PlayComponent implements OnInit, AfterContentInit {
                 this.receivedSession = JSON.parse(Base64.decode(params.session));
                 this.checkReceivedSession();
             }
+            else if (localStorage.getItem('session') !== null) {
+                if (typeof localStorage.getItem('session') === 'string') {
+                    this.receivedSession = JSON.parse(Base64.decode(localStorage.getItem('session') as string));
+                    this.isAutostartEnabled = true;
+                    this.checkReceivedSession();
+                }
+                else {
+                    this.goHome();
+                }
+            }
+            else {
+                this.goHome();
+            }
         });
+    }
+
+    goHome(): void {
+        this._global.goTo('/home');
     }
 
     checkReceivedSession(): void {
@@ -80,7 +102,7 @@ export class PlayComponent implements OnInit, AfterContentInit {
             }
         }
         else {
-            this._global.goTo('/home');
+            this.goHome();
         }
     }
 
@@ -121,5 +143,26 @@ export class PlayComponent implements OnInit, AfterContentInit {
 
     start(): void {
         this._gps.startWatchPosition();
+    }
+
+    setAutostart(): void {
+        const dialogRef = this._dialog.open(DialogComponent, { disableClose: true });
+        dialogRef.componentInstance.title = 'Comenzar automáticamente la partida';
+        dialogRef.componentInstance.content = '¿Deseas que la partida comience automáticamente? Se te guardarán los datos de la partida, pero no podrás navegar por la aplicación hasta que la partida comience.';
+
+        dialogRef.componentInstance.warnButton = 'Sí';
+        dialogRef.componentInstance.warnIcon = 'save';
+
+        dialogRef.componentInstance.secondButton = 'No';
+        dialogRef.componentInstance.secondIcon = 'close';
+
+        dialogRef.afterClosed().toPromise().then((res) => {
+            this._global.setSnackbarTimer(2500);
+            if (res) {
+                this.isAutostartEnabled = true;
+                this._gps.startWatchPosition();
+                this._global.setSession(Base64.encode(JSON.stringify(this.receivedSession)));
+            }
+        });
     }
 }

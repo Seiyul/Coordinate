@@ -17,6 +17,8 @@ export class GlobalService {
     version: any;
     versionDate: any;
 
+    session: any;
+
     list = [{
         name: 'Inicio',
         icon: 'home',
@@ -115,9 +117,23 @@ export class GlobalService {
         return this.versionDate;
     }
 
-    setLatestVersionDate(versionDate: any): any {
+    setLatestVersionDate(versionDate: any): void {
         this.versionDate = versionDate;
         localStorage.setItem('latestVersionDate', this.versionDate);
+    }
+
+    ////////////////////////////////////////////////////
+
+    getSession(): any {
+        if (!this.session) {
+            this.session = localStorage.getItem('session');
+        }
+        return this.session;
+    }
+
+    setSession(session: any): void {
+        this.session = session;
+        localStorage.setItem('session', this.session);
     }
 
     ////////////////////////////////////////////////////

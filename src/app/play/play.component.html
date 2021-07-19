@@ -36,21 +36,31 @@
             <div class="center">
                 <div class="title">Tiempo restante:</div>
                 <span *ngIf="time.days > 0" class="timing">{{ time.days }} día<ng-container *ngIf="time.days > 1">s
-                    </ng-container>, </span>
-                <span class="timing">
-                    <ng-container *ngIf="time.hours < 10">0</ng-container>{{ time.hours }}
-                </span>
+                    </ng-container>,</span>
+                <span class="timing">&nbsp;<ng-container *ngIf="time.hours < 10">0</ng-container>{{ time.hours }}</span>
                 <span class="timing">:<ng-container *ngIf="time.minutes < 10">0</ng-container>{{ time.minutes }}</span>
                 <span class="timing">:<ng-container *ngIf="time.seconds < 10">0</ng-container>{{ time.seconds }}</span>
             </div>
 
             <div class="marginTop">
-                <button mat-raised-button disabled class="marginTop button">
+                <button mat-raised-button class="marginTop button googleMaps" (click)="setAutostart()"
+                    [disabled]="isAutostartEnabled">
                     <mat-icon>
-                        play_arrow
+                        {{ isAutostartEnabled ? 'access_time_filled' : 'check'}}
                     </mat-icon>
                     <span>
-                        Comenzar
+                        {{ isAutostartEnabled ? 'Comenzará automáticamente' : 'Comenzar automáticamente'}}
+                    </span>
+                </button>
+            </div>
+
+            <div class="marginTop">
+                <button mat-raised-button disabled class="marginTop button" *ngIf="!isAutostartEnabled">
+                    <mat-icon>
+                        lock_clock
+                    </mat-icon>
+                    <span>
+                        Comenzar (bloqueado)
                     </span>
                 </button>
             </div>
