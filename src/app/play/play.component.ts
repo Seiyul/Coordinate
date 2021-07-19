@@ -2,6 +2,7 @@ import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalService } from '../services/global.service';
 import { GpsService } from '../services/gps.service';
+import { Base64 } from 'js-base64';
 
 @Component({
     selector: 'app-play',
@@ -17,9 +18,7 @@ export class PlayComponent implements OnInit, AfterContentInit {
     ) { }
 
     receivedSession: any;
-
     initialDate: any;
-
     dateToPrint: any;
 
     time = {
@@ -29,22 +28,40 @@ export class PlayComponent implements OnInit, AfterContentInit {
         seconds: 0
     };
 
+
+    // Si se ha terminado la fecha de inicio
     isTimeFinished = false;
 
+    // Si se ha terminado el temporizador total con fecha de inicio
+    isGameOver = false;
+
+    // Si hay una partida en el localStorage
+    hasAnActiveSession = false;
+
     ngOnInit(): void {
+        if (localStorage.getItem('currentSession') !== null) {
+            if (typeof localStorage.getItem('currentSession') === 'string') {
+                this.receivedSession = Base64.decode(localStorage.getItem('currentSession') as string);
+            }
+            this.checkReceivedSession();
+        }
+    }
+
+    saveCurrentGame(): void {
+        const session = Base64.encode(this.receivedSession);
+        localStorage.setItem('currentSession', session)
     }
 
     ngAfterContentInit(): void {
         this._activatedRoute.queryParams.subscribe(params => {
             if (params.hasOwnProperty('session')) {
-                this.setReceivedSession(params);
+                this.receivedSession = JSON.parse(Base64.decode(params.session));
+                this.checkReceivedSession();
             }
         });
     }
 
-    setReceivedSession(params: any): void {
-        this.receivedSession = JSON.parse(window.atob(params.session));
-
+    checkReceivedSession(): void {
         if (this.receivedSession.hasOwnProperty('name') &&
             this.receivedSession.hasOwnProperty('coordinates') &&
             this.receivedSession.hasOwnProperty('errorMargin') &&
@@ -58,8 +75,7 @@ export class PlayComponent implements OnInit, AfterContentInit {
                 this.initialDate = this.receivedSession.initialDate + ':01.000';
                 this.refreshDate();
             }
-            else
-            {
+            else {
                 this.isTimeFinished = true;
             }
         }
@@ -87,16 +103,14 @@ export class PlayComponent implements OnInit, AfterContentInit {
         if (this.time.days <= 0 &&
             this.time.hours <= 0 &&
             this.time.minutes <= 0 &&
-            this.time.seconds <= 0)
-            {
-                this.isTimeFinished = true;
-            }    
-        else
-        {
+            this.time.seconds <= 0) {
+            this.isTimeFinished = true;
+        }
+        else {
             this.isTimeFinished = false;
-        setTimeout(() => {
-            this.refreshDate();
-        }, 1000);
+            setTimeout(() => {
+                this.refreshDate();
+            }, 1000);
         }
     }
 

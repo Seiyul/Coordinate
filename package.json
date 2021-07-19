@@ -26,6 +26,7 @@
         "@angular/router": "~11.2.11",
         "@angular/service-worker": "~11.2.11",
         "http-server": "^0.12.3",
+        "js-base64": "^3.6.1",
         "qrcode": "^1.4.4",
         "rxjs": "~6.6.0",
         "tslib": "^2.0.0",

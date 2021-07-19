@@ -9,6 +9,7 @@ import { GlobalService } from '../services/global.service';
 import { MasksService } from '../services/masks.service';
 import { QrcodeService } from '../services/qrcode.service';
 import { ValidatorsService } from '../services/validators.service';
+import { Base64 } from 'js-base64';
 
 @Component({
     selector: 'app-create',
@@ -196,9 +197,10 @@ export class CreateComponent implements OnInit, AfterContentInit {
     }
 
     setReceivedSession(params: any): void {
-        this.receivedSession = JSON.parse(window.atob(params.session));
+        this.receivedSession = JSON.parse(Base64.decode(params.session));
 
-        if (this.receivedSession.hasOwnProperty('coordinates') &&
+        if (this.receivedSession.hasOwnProperty('name') &&
+            this.receivedSession.hasOwnProperty('coordinates') &&
             this.receivedSession.hasOwnProperty('errorMargin') &&
             this.receivedSession.hasOwnProperty('partialTimerCheck') &&
             this.receivedSession.hasOwnProperty('partialTimer') &&
@@ -210,6 +212,7 @@ export class CreateComponent implements OnInit, AfterContentInit {
             for (let i = 1; i < this.receivedSession.coordinates.length; i++) {
                 this.addPlace();
             }
+            this.form.get('name')?.setValue(this.receivedSession.name);
             this.form.get('coordinates')?.setValue(this.receivedSession.coordinates);
             this.form.get('errorMargin')?.setValue(this.receivedSession.errorMargin);
             this.form.get('partialTimerCheck')?.setValue(this.receivedSession.partialTimerCheck);

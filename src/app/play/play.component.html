@@ -2,14 +2,14 @@
     <mat-card class="example-card">
         <div *ngIf="receivedSession?.name">
             <div class="center">
-            <div class="title">Nombre de la partida:</div>
-            <span class="timing"> {{ receivedSession.name }}</span>
-        </div>
+                <div class="title">Nombre de la partida:</div>
+                <span class="timing"> {{ receivedSession.name }}</span>
+            </div>
         </div>
         <div *ngIf="receivedSession?.initialDate" class="marginTop">
             <div class="center">
-            <div class="title">Fecha de inicio:</div>
-            <span class="timing">{{ receivedSession.initialDate | date: 'dd/MM/yyyy HH:mm' }}</span>
+                <div class="title">Fecha de inicio:</div>
+                <span class="timing">{{ receivedSession.initialDate | date: 'dd/MM/yyyy HH:mm' }}</span>
             </div>
         </div>
         <div *ngIf="receivedSession?.fullTimerCheck && receivedSession?.initialDate" class="marginTop">
@@ -27,7 +27,7 @@
         </div>
         <div *ngIf="receivedSession?.partialTimerCheck" class="marginTop">
             <div class="center">
-                <div class="title">Tiempo entre ubicaciones:</div> 
+                <div class="title">Tiempo entre ubicaciones:</div>
                 <span class="timing">{{ receivedSession?.partialTimer }}</span>
                 <span class="minutesText"> minutos</span>
             </div>
@@ -35,16 +35,19 @@
         <div *ngIf="!isTimeFinished" class="marginTop">
             <div class="center">
                 <div class="title">Tiempo restante:</div>
-                <span *ngIf="time.days > 0" class="timing">{{ time.days }} día<ng-container *ngIf="time.days > 1">s</ng-container>, </span>
-                <span class="timing"><ng-container *ngIf="time.hours < 10">0</ng-container>{{ time.hours }}</span>
-                 <span class="timing">:<ng-container *ngIf="time.minutes < 10">0</ng-container>{{ time.minutes }}</span>
+                <span *ngIf="time.days > 0" class="timing">{{ time.days }} día<ng-container *ngIf="time.days > 1">s
+                    </ng-container>, </span>
+                <span class="timing">
+                    <ng-container *ngIf="time.hours < 10">0</ng-container>{{ time.hours }}
+                </span>
+                <span class="timing">:<ng-container *ngIf="time.minutes < 10">0</ng-container>{{ time.minutes }}</span>
                 <span class="timing">:<ng-container *ngIf="time.seconds < 10">0</ng-container>{{ time.seconds }}</span>
             </div>
 
             <div class="marginTop">
                 <button mat-raised-button disabled class="marginTop button">
                     <mat-icon>
-                         play_arrow
+                        play_arrow
                     </mat-icon>
                     <span>
                         Comenzar
@@ -55,14 +58,14 @@
 
         <div *ngIf="isTimeFinished">
             <div class="marginTop">
-            <button mat-raised-button color="primary" class="marginTop button" (click)="start()">
-                <mat-icon>
-                    play_arrow
-                </mat-icon>
-                <span>
-                    Comenzar
-                </span>
-            </button>
+                <button mat-raised-button color="primary" class="marginTop button" (click)="start()">
+                    <mat-icon>
+                        play_arrow
+                    </mat-icon>
+                    <span>
+                        Comenzar
+                    </span>
+                </button>
             </div>
         </div>
     </mat-card>
