@@ -69,7 +69,7 @@ background: linear-gradient(to right, rgb(245, 211, 99),rgb(255, 89, 0));
 }
 
 .current {
-    background-color: rgba(75, 255, 84, 0.486);
+    background-color: rgba(255, 70, 255, 0.486);
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
@@ -80,4 +80,28 @@ background: linear-gradient(to right, rgb(245, 211, 99),rgb(255, 89, 0));
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
+}
+
+
+.finished {
+    background-color: rgba(122, 253, 95, 0.671);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.goingGreen {
+    color: green;
+    -webkit-transition: color 0.5s ease-out;
+    -moz-transition: color 0.5s ease-out;
+    -o-transition: color 0.5s ease-out;
+    transition: color 0.5s ease-out;
+}
+
+.goingRed {
+    color: red;
+    -webkit-transition: color 0.5s ease-out;
+    -moz-transition: color 0.5s ease-out;
+    -o-transition: color 0.5s ease-out;
+    transition: color 0.5s ease-out;
 }

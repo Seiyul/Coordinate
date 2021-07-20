@@ -66,7 +66,6 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         this.installPwa();
         this.checkIfComesFromPwa();
-        // this.startNavigation();
         this.lockOrientationScreen();
         this.refreshDate();
         this.linkList = this._global.getLinkList();
@@ -100,13 +99,11 @@ export class AppComponent implements OnInit {
         dialogRef.componentInstance.title = 'Salir de la partida';
         dialogRef.componentInstance.content = '¿Deseas salir de la partida?';
         dialogRef.afterClosed().toPromise().then((res) => {
-            this._global.setSnackbarTimer(2500);
+            this._global.setSnackbarTimer(3500);
             if (res) {
-                this._global.setSnackbarText('La partida se ha borrado correctamente.');
+                this._global.setSnackbarText('Has salido de la partida correctamente');
                 localStorage.removeItem('session');
                 this._global.setSession(null);
-                console.log('go to home');
-
                 this._global.goTo('/home');
                 this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
             }

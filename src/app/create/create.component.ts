@@ -142,8 +142,8 @@ export class CreateComponent implements OnInit, AfterContentInit {
     }
 
     helpButton(): void {
-        this._global.setSnackbarTimer(2500);
-        this._global.setSnackbarText('Pendiente de redactar 😅');
+        this._global.setSnackbarTimer(3000);
+        this._global.setSnackbarText('Textos de ayuda en desarrollo');
         this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
     }
 
@@ -252,5 +252,9 @@ export class CreateComponent implements OnInit, AfterContentInit {
                 this.addPlace();
             }
         });
+    }
+
+    goToGame(): void {
+        window.location.href = this._qrcode.getUrl(this.form.value, false);
     }
 }

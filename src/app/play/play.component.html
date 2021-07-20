@@ -89,16 +89,39 @@
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngIf="isSessionStarted">
+        <ng-container *ngIf="isSessionStarted && !isGameOver">
             <div class="marginTop">
                 <div class="center">
-                    <div class="title">Coordenadas recibidas (en desarrollo)</div>
+                    <div class="title">Coordenadas recibidas (modo desarrollo)</div>
                     <ng-container *ngFor="let places of receivedSession.coordinates">
                         <div class="title"
-                            [ngClass]="{'current': places.status === 'current', 'waiting': places.status === 'waiting'}">
-                            {{ places | json}}
+                            [ngClass]="{'current': places.status === 'current', 'waiting': places.status === 'waiting', 'finished' : places.status === 'finished'}">
+                            {{ places | json }}
                         </div>
                     </ng-container>
+                    <div>
+                        <div class="timing"
+                            [ngClass]="{'goingRed': actualDistance > lastDistance, 'goingGreen': actualDistance <= lastDistance}">
+                            {{ distance(position) }} m
+                        </div>
+                        <div class="title marginTop">
+                            Margen de error: ±{{ errorMargin }} m
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="isGameOver">
+            <div class="marginTop">
+                <div class="center">
+                    <div class="title">Coordenadas recibidas:</div>
+                    <ng-container *ngFor="let places of receivedSession.coordinates">
+                        <div class="title"
+                            [ngClass]="{'current': places.status === 'current', 'waiting': places.status === 'waiting', 'finished' : places.status === 'finished'}">
+                            {{ places | json }}
+                        </div>
+                    </ng-container>
+                    <div class="timing">Fin del juego</div>
                 </div>
             </div>
         </ng-container>

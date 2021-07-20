@@ -141,6 +141,7 @@ export class GlobalService {
             localStorage.setItem('session', this.session);
         }
         else {
+            localStorage.removeItem('session');
             this.session = null;
         }
     }

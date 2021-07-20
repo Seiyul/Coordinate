@@ -14,7 +14,8 @@
                 <input matInput placeholder="Nombre de la partida" formControlName="name">
                 <button matSuffix mat-icon-button (click)="helpButton()">
                     <mat-icon class="helpIcon">
-                        help
+                        <!-- help -->
+                        construction
                     </mat-icon>
                 </button>
                 <mat-hint>
@@ -50,7 +51,8 @@
                                 (input)="masks.checkLatitude(coordinates.at(i).get('latitude'))">
                             <button matSuffix mat-icon-button (click)="helpButton()">
                                 <mat-icon class="helpIcon">
-                                    help
+                                    <!-- help -->
+                                    construction
                                 </mat-icon>
                             </button>
                             <mat-hint>El rango debe estar entre -90 y +90. Mínimo tiene que tener 4 decimales
@@ -64,7 +66,8 @@
                                 (input)="masks.checkLongitude(coordinates.at(i).get('longitude'))">
                             <button matSuffix mat-icon-button (click)="helpButton()">
                                 <mat-icon class="helpIcon">
-                                    help
+                                    <!-- help -->
+                                    construction
                                 </mat-icon>
                             </button>
                             <mat-hint>El rango debe estar entre -180 y +180. Mínimo tiene que tener 4 decimales
@@ -73,15 +76,17 @@
                     </div>
                     <div>
                         <mat-form-field appearance="outline" class="formElement">
-                            <mat-label>Mensaje (opcional)</mat-label>
-                            <textarea matInput cdkTextareaAutosize placeholder="Mensaje" formControlName="description">
+                            <mat-label>Mensaje (en desarrollo)</mat-label>
+                            <textarea matInput cdkTextareaAutosize readonly placeholder="Mensaje (en desarrollo)"
+                                formControlName="description">
                             </textarea>
                             <button matSuffix mat-icon-button (click)="helpButton()">
                                 <mat-icon class="helpIcon">
-                                    help
+                                    <!-- help -->
+                                    construction
                                 </mat-icon>
                             </button>
-                            <mat-hint>El mensaje se mostrará cuando el usuario esté dentro del rango de la ubicación.
+                            <mat-hint>El mensaje se mostrará como pista a la ubicación marcada. En desarrollo.
                             </mat-hint>
                         </mat-form-field>
                     </div>
@@ -101,13 +106,15 @@
         </div>
 
         <div class="formElement">
-            <mat-checkbox formControlName="partialTimerCheck" (change)="partialTimerCheckClicked()"
-                [disabled]="coordinates.controls.length <= 1">
-                Temporizador parcial
+            <mat-checkbox formControlName="partialTimerCheck" (change)="partialTimerCheckClicked()" [disabled]="true">
+                <!-- [disabled]="coordinates.controls.length <= 1"> -->
+                Temporizador parcial (en desarrollo)
             </mat-checkbox>
-            <button matSuffix mat-icon-button (click)="helpButton()" *ngIf="coordinates.controls.length <= 1">
+            <button matSuffix mat-icon-button (click)="helpButton()" *ngIf="false">
+                <!-- *ngIf="coordinates.controls.length <= 1" -->
                 <mat-icon class="helpIcon">
-                    help
+                    <!-- help -->
+                    construction
                 </mat-icon>
             </button>
         </div>
@@ -119,7 +126,8 @@
                     (input)="updateValueValidityTimers()">
                 <button matSuffix mat-icon-button (click)="helpButton()">
                     <mat-icon class="helpIcon">
-                        help
+                        <!-- help -->
+                        construction
                     </mat-icon>
                 </button>
                 <mat-hint>
@@ -134,8 +142,8 @@
         </div>
 
         <div class="formElement">
-            <mat-checkbox formControlName="fullTimerCheck" (change)="fullTimerCheckClicked()">
-                Temporizador total
+            <mat-checkbox formControlName="fullTimerCheck" (change)="fullTimerCheckClicked()" [disabled]="true">
+                Temporizador total (en desarrollo)
             </mat-checkbox>
         </div>
 
@@ -145,7 +153,8 @@
                 <input matInput placeholder="Total" formControlName="fullTimer" (input)="updateValueValidityTimers()">
                 <button matSuffix mat-icon-button (click)="helpButton()">
                     <mat-icon class="helpIcon">
-                        help
+                        <!-- help -->
+                        construction
                     </mat-icon>
                 </button>
                 <mat-hint class="center">
@@ -175,7 +184,8 @@
                     [min]="minDate">
                 <button matSuffix mat-icon-button (click)="helpButton()">
                     <mat-icon class="helpIcon">
-                        help
+                        <!-- help -->
+                        construction
                     </mat-icon>
                 </button>
                 <mat-hint>
@@ -194,7 +204,8 @@
                 <div>
                     <span>Modificable</span>
                     <mat-icon (click)="helpButton()" class="miniHelp">
-                        help
+                        <!-- help -->
+                        construction
                     </mat-icon>
                 </div>
                 <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
@@ -220,7 +231,8 @@
                 <div>
                     <span>Partida</span>
                     <mat-icon (click)="helpButton()" class="miniHelp">
-                        help
+                        <!-- help -->
+                        construction
                     </mat-icon>
                 </div>
                 <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
@@ -238,6 +250,15 @@
                     </mat-icon>
                     <span>
                         Link
+                    </span>
+                </button>
+                <button mat-raised-button class="endButtons" [ngClass]="{'googleMaps': form.valid}"
+                    [disabled]="form.invalid" (click)="goToGame()">
+                    <mat-icon>
+                        task_alt
+                    </mat-icon>
+                    <span>
+                        Ir al juego
                     </span>
                 </button>
             </div>

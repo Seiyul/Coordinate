@@ -39,17 +39,6 @@
     </div>
 
     <div class="formElement">
-        <button mat-raised-button (click)="getRandomCoordinates()" color="accent">
-            <mat-icon>
-                auto_fix_high
-            </mat-icon>
-            <span>
-                Copiar coords. de prueba
-            </span>
-        </button>
-    </div>
-
-    <div class="formElement">
         <mat-form-field appearance="outline">
             <mat-label>Coordenadas</mat-label>
             <input matInput placeholder="" [formControl]="getCoordinatesControl">
@@ -59,7 +48,7 @@
                 </mat-icon>
             </button>
             <mat-hint>Pulsa en <mat-icon>help</mat-icon> para más
-                información.
+                información. <br /> (En desarrollo)
             </mat-hint>
         </mat-form-field>
     </div>

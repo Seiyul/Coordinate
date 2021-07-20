@@ -23,6 +23,16 @@ export class PlayComponent implements OnInit, AfterContentInit {
         private _snackbar: MatSnackBar
     ) { }
 
+    get position(): any {
+        return this._gps.getPosition();
+    }
+
+    get errorMargin(): any {
+        if (this._gps.getPosition()) {
+            return this._gps.getPosition().accuracy < 15 ? 15 : this._gps.getPosition().accuracy > 100 ? 100 : this._gps.getPosition().accuracy;
+        }
+    }
+
     receivedSession: any;
     initialDate: any;
     dateToPrint: any;
@@ -34,8 +44,11 @@ export class PlayComponent implements OnInit, AfterContentInit {
         seconds: 0
     };
 
-    isAutostartEnabled = false;
+    lastDistance: any;
+    actualDistance: any;
 
+    // Valor que comprueba si el autostart está activo
+    isAutostartEnabled = false;
 
     // Si se ha terminado la fecha de inicio
     isTimeFinished = false;
@@ -98,7 +111,6 @@ export class PlayComponent implements OnInit, AfterContentInit {
             this.receivedSession.hasOwnProperty('initialDate')) {
             for (let i = 0; i < this.receivedSession.coordinates.length; i++) {
                 if (this.receivedSession.coordinates[i].status !== 'waiting') {
-                    console.log('this.receivedSession.coordinates[i].status -->', this.receivedSession.coordinates[i].status);
                     this.isSessionStarted = true;
                 }
             }
@@ -176,10 +188,108 @@ export class PlayComponent implements OnInit, AfterContentInit {
 
     start(): void {
         this.isSessionStarted = true;
-        this.receivedSession.coordinates[0].status = 'current';
+        for (let i = 0; i < this.receivedSession.coordinates.length; i++) {
+            if (this.receivedSession.coordinates[i].status === 'pending') {
+                this.receivedSession.coordinates[i].status === 'current';
+                break;
+            }
+        }
         this._global.setSession(this.receivedSession);
         this._gps.startWatchPosition();
     }
 
+
+    distance(position: any): any {
+        this.lastDistance = this.actualDistance;
+
+        if (this.receivedSession.coordinates.filter((el: any) => el.status === 'current' || el.status === 'waiting').length === 0) {
+            this.endOfGame();
+        }
+        else {
+            // Current values
+            if (position) {
+                if (this.receivedSession.coordinates.filter((el: any) => el.status === 'current').length === 0 &&
+                    this.receivedSession.coordinates.filter((el: any) => el.status === 'finished').length === 0) {
+                    this.receivedSession.coordinates[0].status = 'current';
+                }
+
+                const latitudeChosen = this.receivedSession.coordinates.filter((el: any) => el.status === 'current')[0].latitude;
+                const longitudeChosen = this.receivedSession.coordinates.filter((el: any) => el.status === 'current')[0].longitude;
+
+                const latitude = position.latitude;
+                const longitude = position.longitude;
+
+                const R = 6371e3;
+                const φ1 = latitude * Math.PI / 180; // φ, λ in radians
+                const φ2 = latitudeChosen * Math.PI / 180;
+                const Δφ = (latitudeChosen - latitude) * Math.PI / 180;
+                const Δλ = (longitudeChosen - longitude) * Math.PI / 180;
+
+                const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                const d = R * c; // in metres
+
+                const result = d;
+                this.actualDistance = result;
+
+                const precision = (this.errorMargin < 15) ? 15 : 100;
+                const resultToShow = parseFloat((result).toFixed(2));
+
+                if (resultToShow <= precision) {
+                    console.log('resultToShow -->', resultToShow);
+                    console.log('precision -->', precision);
+
+
+                    const coords = this.receivedSession.coordinates;
+
+                    for (let i = 0; i < coords.length; i++) {
+                        if (coords[i].status === 'current') {
+                            coords[i].status = 'finished';
+                            if (i < coords.length - 1) {
+                                coords[i + 1].status = 'current';
+                                this._global.setSession(this.receivedSession);
+                                break;
+                            }
+                            else {
+                                this.endOfGame();
+                            }
+                        }
+                    }
+                }
+
+                return resultToShow;
+            }
+            else {
+                return 'Calculando...';
+            }
+        }
+    }
+
+    animateValue(obj: any, start: any, end: any, duration: any) {
+        let startTimestamp: any = null;
+        const step = (timestamp: any) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = Math.floor(progress * (end - start) + start);
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    endOfGame(): void {
+        this.isGameOver = true;
+        this._global.setSnackbarTimer(5500);
+        this._global.setSnackbarText('¡¡Fin del juego!! Enhorabuena 😊');
+        this._snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
+        this._global.setSession(null);
+        localStorage.removeItem('session');
+        setTimeout(() => {
+            this._global.goTo('/home');
+        }, 5500);
+    }
 
 }
