@@ -58,3 +58,16 @@
 background: -prefix-linear-gradient(left, rgb(255, 196, 0), red);
 background: linear-gradient(to right, rgb(255, 196, 0), red)
 }
+
+.center {
+    text-align: center;
+  }
+
+  .minititle {
+      font-weight: bold;
+      font-size: 13px;
+  }
+
+  .marginTop {
+      margin-top: 8px;
+  }

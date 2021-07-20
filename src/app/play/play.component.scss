@@ -67,3 +67,17 @@
 background: -prefix-linear-gradient(left, rgb(245, 211, 99), rgb(255, 89, 0));
 background: linear-gradient(to right, rgb(245, 211, 99),rgb(255, 89, 0));
 }
+
+.current {
+    background-color: rgba(75, 255, 84, 0.486);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.waiting {
+    background-color: rgba(253, 174, 70, 0.671);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}

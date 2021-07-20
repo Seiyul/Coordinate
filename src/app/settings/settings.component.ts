@@ -48,5 +48,8 @@ export class SettingsComponent implements OnInit {
         window.open(url, '_blank');
     }
 
+    goBack(): void {
+        window.history.back();
+    }
 
 }

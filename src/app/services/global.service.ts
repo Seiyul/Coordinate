@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Base64 } from 'js-base64';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -126,14 +127,22 @@ export class GlobalService {
 
     getSession(): any {
         if (!this.session) {
-            this.session = localStorage.getItem('session');
+            if (localStorage.getItem('session') as string) {
+                this.session = JSON.parse(Base64.decode(localStorage.getItem('session') as string));
+            }
         }
         return this.session;
     }
 
     setSession(session: any): void {
-        this.session = session;
-        localStorage.setItem('session', this.session);
+        if (session) {
+            session = Base64.encode(JSON.stringify(session));
+            this.session = session;
+            localStorage.setItem('session', this.session);
+        }
+        else {
+            this.session = null;
+        }
     }
 
     ////////////////////////////////////////////////////

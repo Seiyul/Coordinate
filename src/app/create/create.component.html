@@ -112,7 +112,7 @@
             </button>
         </div>
 
-        <div class="partialTimer" *ngIf="!!form.getRawValue().partialTimerCheck">
+        <div class="partialTimer formElement" *ngIf="!!form.getRawValue().partialTimerCheck">
             <mat-form-field appearance="outline">
                 <mat-label>Temporizador parcial</mat-label>
                 <input matInput placeholder="Parcial" formControlName="partialTimer"
@@ -139,7 +139,7 @@
             </mat-checkbox>
         </div>
 
-        <div class="totalTimer" *ngIf="!!form.getRawValue().fullTimerCheck">
+        <div class="totalTimer formElement" *ngIf="!!form.getRawValue().fullTimerCheck">
             <mat-form-field appearance="outline">
                 <mat-label>Temporizador total</mat-label>
                 <input matInput placeholder="Total" formControlName="fullTimer" (input)="updateValueValidityTimers()">
@@ -148,7 +148,7 @@
                         help
                     </mat-icon>
                 </button>
-                <mat-hint>
+                <mat-hint class="center">
                     <div>
                         Tiempo máximo de la partida (en minutos).
                     </div>
@@ -168,7 +168,7 @@
             </mat-checkbox>
         </div>
 
-        <div class="formElement" *ngIf="!!form.getRawValue().initialDateCheck">
+        <div class="formElement startDate" *ngIf="!!form.getRawValue().initialDateCheck">
             <mat-form-field appearance="outline">
                 <mat-label>Fecha de inicio</mat-label>
                 <input matInput placeholder="dd/mm/yyyy HH:MM" formControlName="initialDate" type="datetime-local"
@@ -190,57 +190,58 @@
         </div>
 
         <ng-container class="marginTop">
-        <div class="buttons modificable">
-            <div>
-                <span>Modificable</span>
-                <mat-icon (click)="helpButton()" class="miniHelp">
-                    help
-                </mat-icon>
+            <div class="formElement modificable">
+                <div>
+                    <span>Modificable</span>
+                    <mat-icon (click)="helpButton()" class="miniHelp">
+                        help
+                    </mat-icon>
+                </div>
+                <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
+                    (click)="generateImage(true)">
+                    <mat-icon>
+                        qr_code_2
+                    </mat-icon>
+                    <span>
+                        QR
+                    </span>
+                </button>
+                <button mat-raised-button class="endButtons" [disabled]="form.invalid" (click)="getLink(true)">
+                    <mat-icon>
+                        link
+                    </mat-icon>
+                    <span>
+                        Link
+                    </span>
+                </button>
             </div>
-            <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
-                (click)="generateImage(true)">
-                <mat-icon>
-                    qr_code_2
-                </mat-icon>
-                <span>
-                    QR
-                </span>
-            </button>
-            <button mat-raised-button class="endButtons" [disabled]="form.invalid" (click)="getLink(true)">
-                <mat-icon>
-                    link
-                </mat-icon>
-                <span>
-                    Link
-                </span>
-            </button>
-        </div>
-        <div class="buttons partida">
-            <div>
-                <span>Partida</span>
-                <mat-icon (click)="helpButton()" class="miniHelp">
-                    help
-                </mat-icon>
+
+            <div class="partida formElement">
+                <div>
+                    <span>Partida</span>
+                    <mat-icon (click)="helpButton()" class="miniHelp">
+                        help
+                    </mat-icon>
+                </div>
+                <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
+                    (click)="generateImage(false)">
+                    <mat-icon>
+                        qr_code_2
+                    </mat-icon>
+                    <span>
+                        QR
+                    </span>
+                </button>
+                <button mat-raised-button class="endButtons" [disabled]="form.invalid" (click)="getLink(false)">
+                    <mat-icon>
+                        link
+                    </mat-icon>
+                    <span>
+                        Link
+                    </span>
+                </button>
             </div>
-            <button mat-raised-button color="accent" class="endButtons" [disabled]="form.invalid"
-                (click)="generateImage(false)">
-                <mat-icon>
-                    qr_code_2
-                </mat-icon>
-                <span>
-                    QR
-                </span>
-            </button>
-            <button mat-raised-button class="endButtons" [disabled]="form.invalid" (click)="getLink(false)">
-                <mat-icon>
-                    link
-                </mat-icon>
-                <span>
-                    Link
-                </span>
-            </button>
-        </div>
-    </ng-container>
+        </ng-container>
     </form>
 
     <ng-container *ngIf="imageSource">

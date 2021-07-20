@@ -1,82 +1,106 @@
 <div class="main-div">
     <mat-card class="example-card">
-        <div *ngIf="receivedSession?.name">
-            <div class="center">
-                <div class="title">Nombre de la partida:</div>
-                <span class="timing"> {{ receivedSession.name }}</span>
+        <ng-container *ngIf="!isSessionStarted">
+            <div *ngIf="receivedSession?.name">
+                <div class="center">
+                    <div class="title">Nombre de la partida:</div>
+                    <span class="timing"> {{ receivedSession.name }}</span>
+                </div>
             </div>
-        </div>
-        <div *ngIf="receivedSession?.initialDate" class="marginTop">
-            <div class="center">
-                <div class="title">Fecha de inicio:</div>
-                <span class="timing">{{ receivedSession.initialDate | date: 'dd/MM/yyyy HH:mm' }}</span>
+            <div *ngIf="receivedSession?.coordinates" class="marginTop">
+                <div class="center">
+                    <div class="title">Número de ubicaciones:</div>
+                    <span class="timing"> {{ receivedSession.coordinates.length }}</span>
+                </div>
             </div>
-        </div>
-        <div *ngIf="receivedSession?.fullTimerCheck && receivedSession?.initialDate" class="marginTop">
-            <div class="center">
-                <div class="title">Fecha de final:</div>
-                <span class="timing">{{ calculateFinalDate() | date: 'dd/MM/yyyy HH:mm' }}</span>
+            <div *ngIf="receivedSession?.initialDate" class="marginTop">
+                <div class="center">
+                    <div class="title">Fecha de inicio:</div>
+                    <span class="timing">{{ receivedSession.initialDate | date: 'dd/MM/yyyy HH:mm' }}</span>
+                </div>
             </div>
-        </div>
-        <div *ngIf="receivedSession?.fullTimerCheck && !receivedSession?.initialDate" class="marginTop">
-            <div class="center">
-                <div class="title">Tiempo de juego:</div>
-                <span class="timing">{{ receivedSession?.fullTimer }}</span>
-                <span class="minutesText"> minutos</span>
+            <div *ngIf="receivedSession?.fullTimerCheck && receivedSession?.initialDate" class="marginTop">
+                <div class="center">
+                    <div class="title">Fecha de final:</div>
+                    <span class="timing">{{ calculateFinalDate() | date: 'dd/MM/yyyy HH:mm' }}</span>
+                </div>
             </div>
-        </div>
-        <div *ngIf="receivedSession?.partialTimerCheck" class="marginTop">
-            <div class="center">
-                <div class="title">Tiempo entre ubicaciones:</div>
-                <span class="timing">{{ receivedSession?.partialTimer }}</span>
-                <span class="minutesText"> minutos</span>
+            <div *ngIf="receivedSession?.fullTimerCheck && !receivedSession?.initialDate" class="marginTop">
+                <div class="center">
+                    <div class="title">Tiempo de juego:</div>
+                    <span class="timing">{{ receivedSession?.fullTimer }}</span>
+                    <span class="minutesText"> minutos</span>
+                </div>
             </div>
-        </div>
-        <div *ngIf="!isTimeFinished" class="marginTop">
-            <div class="center">
-                <div class="title">Tiempo restante:</div>
-                <span *ngIf="time.days > 0" class="timing">{{ time.days }} día<ng-container *ngIf="time.days > 1">s
-                    </ng-container>,</span>
-                <span class="timing">&nbsp;<ng-container *ngIf="time.hours < 10">0</ng-container>{{ time.hours }}</span>
-                <span class="timing">:<ng-container *ngIf="time.minutes < 10">0</ng-container>{{ time.minutes }}</span>
-                <span class="timing">:<ng-container *ngIf="time.seconds < 10">0</ng-container>{{ time.seconds }}</span>
+            <div *ngIf="receivedSession?.partialTimerCheck" class="marginTop">
+                <div class="center">
+                    <div class="title">Tiempo entre ubicaciones:</div>
+                    <span class="timing">{{ receivedSession?.partialTimer }}</span>
+                    <span class="minutesText"> minutos</span>
+                </div>
+            </div>
+            <div *ngIf="!isTimeFinished" class="marginTop">
+                <div class="center">
+                    <div class="title">Tiempo restante:</div>
+                    <span *ngIf="time.days > 0" class="timing">{{ time.days }} día<ng-container *ngIf="time.days > 1">s
+                        </ng-container>,</span>
+                    <span class="timing">&nbsp;<ng-container *ngIf="time.hours < 10">0</ng-container>{{ time.hours
+                        }}</span>
+                    <span class="timing">:<ng-container *ngIf="time.minutes < 10">0</ng-container>{{ time.minutes
+                        }}</span>
+                    <span class="timing">:<ng-container *ngIf="time.seconds < 10">0</ng-container>{{ time.seconds
+                        }}</span>
+                </div>
+
+                <div class="marginTop">
+                    <button mat-raised-button class="marginTop button googleMaps" (click)="setAutostart()"
+                        [disabled]="isAutostartEnabled">
+                        <mat-icon>
+                            {{ isAutostartEnabled ? 'access_time_filled' : 'check'}}
+                        </mat-icon>
+                        <span>
+                            {{ isAutostartEnabled ? 'Comenzará automáticamente' : 'Comenzar automáticamente'}}
+                        </span>
+                    </button>
+                </div>
+
+                <div class="marginTop">
+                    <button mat-raised-button disabled class="marginTop button" *ngIf="!isAutostartEnabled">
+                        <mat-icon>
+                            lock_clock
+                        </mat-icon>
+                        <span>
+                            Comenzar (bloqueado)
+                        </span>
+                    </button>
+                </div>
             </div>
 
-            <div class="marginTop">
-                <button mat-raised-button class="marginTop button googleMaps" (click)="setAutostart()"
-                    [disabled]="isAutostartEnabled">
-                    <mat-icon>
-                        {{ isAutostartEnabled ? 'access_time_filled' : 'check'}}
-                    </mat-icon>
-                    <span>
-                        {{ isAutostartEnabled ? 'Comenzará automáticamente' : 'Comenzar automáticamente'}}
-                    </span>
-                </button>
+            <div *ngIf="isTimeFinished">
+                <div class="marginTop">
+                    <button mat-raised-button color="primary" class="marginTop button" (click)="start()">
+                        <mat-icon>
+                            play_arrow
+                        </mat-icon>
+                        <span>
+                            Comenzar
+                        </span>
+                    </button>
+                </div>
             </div>
-
+        </ng-container>
+        <ng-container *ngIf="isSessionStarted">
             <div class="marginTop">
-                <button mat-raised-button disabled class="marginTop button" *ngIf="!isAutostartEnabled">
-                    <mat-icon>
-                        lock_clock
-                    </mat-icon>
-                    <span>
-                        Comenzar (bloqueado)
-                    </span>
-                </button>
+                <div class="center">
+                    <div class="title">Coordenadas recibidas (en desarrollo)</div>
+                    <ng-container *ngFor="let places of receivedSession.coordinates">
+                        <div class="title"
+                            [ngClass]="{'current': places.status === 'current', 'waiting': places.status === 'waiting'}">
+                            {{ places | json}}
+                        </div>
+                    </ng-container>
+                </div>
             </div>
-        </div>
-
-        <div *ngIf="isTimeFinished">
-            <div class="marginTop">
-                <button mat-raised-button color="primary" class="marginTop button" (click)="start()">
-                    <mat-icon>
-                        play_arrow
-                    </mat-icon>
-                    <span>
-                        Comenzar
-                    </span>
-                </button>
-            </div>
-        </div>
+        </ng-container>
     </mat-card>
 </div>

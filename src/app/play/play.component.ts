@@ -46,6 +46,9 @@ export class PlayComponent implements OnInit, AfterContentInit {
     // Si hay una partida en el localStorage
     hasAnActiveSession = false;
 
+    // Si hay una partida empezada
+    isSessionStarted = false;
+
     ngOnInit(): void {
         if (!this._gps.getIsWatchPositionTurnedOn()) {
             this._gps.startWatchPosition();
@@ -59,11 +62,7 @@ export class PlayComponent implements OnInit, AfterContentInit {
 
     ngAfterContentInit(): void {
         this._activatedRoute.queryParams.subscribe(params => {
-            if (params.hasOwnProperty('session')) {
-                this.receivedSession = JSON.parse(Base64.decode(params.session));
-                this.checkReceivedSession();
-            }
-            else if (localStorage.getItem('session') !== null) {
+            if (localStorage.getItem('session') !== null) {
                 if (typeof localStorage.getItem('session') === 'string') {
                     this.receivedSession = JSON.parse(Base64.decode(localStorage.getItem('session') as string));
                     this.isAutostartEnabled = true;
@@ -72,6 +71,10 @@ export class PlayComponent implements OnInit, AfterContentInit {
                 else {
                     this.goHome();
                 }
+            }
+            else if (params.hasOwnProperty('session')) {
+                this.receivedSession = JSON.parse(Base64.decode(params.session));
+                this.checkReceivedSession();
             }
             else {
                 this.goHome();
@@ -93,6 +96,12 @@ export class PlayComponent implements OnInit, AfterContentInit {
             this.receivedSession.hasOwnProperty('fullTimer') &&
             this.receivedSession.hasOwnProperty('initialDateCheck') &&
             this.receivedSession.hasOwnProperty('initialDate')) {
+            for (let i = 0; i < this.receivedSession.coordinates.length; i++) {
+                if (this.receivedSession.coordinates[i].status !== 'waiting') {
+                    console.log('this.receivedSession.coordinates[i].status -->', this.receivedSession.coordinates[i].status);
+                    this.isSessionStarted = true;
+                }
+            }
             if (this.receivedSession.initialDateCheck) {
                 this.initialDate = this.receivedSession.initialDate + ':01.000';
                 this.refreshDate();
@@ -126,6 +135,9 @@ export class PlayComponent implements OnInit, AfterContentInit {
             this.time.hours <= 0 &&
             this.time.minutes <= 0 &&
             this.time.seconds <= 0) {
+            if (this.isAutostartEnabled) {
+                this.start();
+            }
             this.isTimeFinished = true;
         }
         else {
@@ -139,10 +151,6 @@ export class PlayComponent implements OnInit, AfterContentInit {
     calculateFinalDate(): any {
         const finalDateTime = new Date(this.initialDate).getTime() + (this.receivedSession.fullTimer * 60 * 1000);
         return new Date(finalDateTime);
-    }
-
-    start(): void {
-        this._gps.startWatchPosition();
     }
 
     setAutostart(): void {
@@ -161,8 +169,17 @@ export class PlayComponent implements OnInit, AfterContentInit {
             if (res) {
                 this.isAutostartEnabled = true;
                 this._gps.startWatchPosition();
-                this._global.setSession(Base64.encode(JSON.stringify(this.receivedSession)));
+                this._global.setSession(this.receivedSession);
             }
         });
     }
+
+    start(): void {
+        this.isSessionStarted = true;
+        this.receivedSession.coordinates[0].status = 'current';
+        this._global.setSession(this.receivedSession);
+        this._gps.startWatchPosition();
+    }
+
+
 }

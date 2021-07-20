@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
 import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { GlobalService } from './services/global.service';
@@ -72,7 +71,6 @@ export class AppComponent implements OnInit {
         this.refreshDate();
         this.linkList = this._global.getLinkList();
         this.checkIfHasSession();
-        this._gps.startWatchPosition();
     }
 
     routerChange(event: any): void {
@@ -105,8 +103,10 @@ export class AppComponent implements OnInit {
             this._global.setSnackbarTimer(2500);
             if (res) {
                 this._global.setSnackbarText('La partida se ha borrado correctamente.');
-                this._global.setSession(null);
                 localStorage.removeItem('session');
+                this._global.setSession(null);
+                console.log('go to home');
+
                 this._global.goTo('/home');
                 this.snackbar.openFromComponent(CustomSnackbarComponent, { duration: this._global.getSnackbarTimer() });
             }

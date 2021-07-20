@@ -35,7 +35,7 @@ export class CreateComponent implements OnInit, AfterContentInit {
 
 
     form = this._formBuilder.group({
-        name: new FormControl('',[Validators.required, Validators.maxLength(20)]),
+        name: new FormControl('', [Validators.required, Validators.maxLength(20)]),
         coordinates: new FormArray([]),
         errorMargin: new FormControl(''),
         partialTimerCheck: new FormControl(false),
@@ -71,7 +71,7 @@ export class CreateComponent implements OnInit, AfterContentInit {
             latitude: new FormControl('', [Validators.min(-90), Validators.max(90), Validators.required, Validators.maxLength(20), Validators.minLength(6)]),
             longitude: new FormControl('', [Validators.min(-180), Validators.max(180), Validators.required, Validators.maxLength(20), Validators.minLength(6)]),
             description: new FormControl(''),
-            status: new FormControl('pending')
+            status: new FormControl('waiting')
         })
     }
 
@@ -173,7 +173,7 @@ export class CreateComponent implements OnInit, AfterContentInit {
                 'latitude': latitude,
                 'longitude': longitude,
                 'description': 'Texto de ejemplo',
-                'status': 'pending'
+                'status': 'waiting'
             });
 
             this.form.get('coordinates')?.setValue(array);
