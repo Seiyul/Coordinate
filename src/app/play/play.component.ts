@@ -29,7 +29,7 @@ export class PlayComponent implements OnInit, AfterContentInit {
 
     get errorMargin(): any {
         if (this._gps.getPosition()) {
-            return this._gps.getPosition().accuracy < 15 ? 15 : this._gps.getPosition().accuracy > 100 ? 100 : this._gps.getPosition().accuracy;
+            return this._gps.getPosition().accuracy < 15 ? 15 : this._gps.getPosition().accuracy > 100 ? 100 : this._gps.getPosition().accuracy.toFixed(2);
         }
     }
 
@@ -238,10 +238,6 @@ export class PlayComponent implements OnInit, AfterContentInit {
                 const resultToShow = parseFloat((result).toFixed(2));
 
                 if (resultToShow <= precision) {
-                    console.log('resultToShow -->', resultToShow);
-                    console.log('precision -->', precision);
-
-
                     const coords = this.receivedSession.coordinates;
 
                     for (let i = 0; i < coords.length; i++) {
